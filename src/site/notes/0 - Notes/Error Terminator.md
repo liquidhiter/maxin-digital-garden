@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/0-notes/error-terminator/","noteIcon":"","created":"2024-01-26T23:38:05.074+01:00","updated":"2024-01-26T23:40:08.520+01:00"}
+{"dg-publish":true,"permalink":"/0-notes/error-terminator/","noteIcon":"","created":"2024-01-26T23:38:05.074+01:00","updated":"2024-01-26T23:48:49.553+01:00"}
 ---
 
 - git pull
@@ -19,25 +19,19 @@
     hint: invocation.
     fatal: Need to specify how to reconcile divergent branches.
     ```
-
     - cause of the issue: 
         - Git wants to know how it should handle the situation where our remote branch is out of sync with our
         local branch.
     - solution: `git pull --rebase`
     - suggested reading: 
-        - [Git merge strategy options & examples | Atlassian Git Tutorial](https://www.atlassian.com/git
-        tutorials/using-branches/merge-strategy)
-        - [git - Error "Fatal: Not possible to fast-forward, aborting" - Stack Overflow](https://stackoverflow
-        com/questions/13106179/error-fatal-not-possible-to-fast-forward-aborting)
+        - [Git merge strategy options & examples | Atlassian Git Tutorial](https://www.atlassian.com/gittutorials/using-branches/merge-strategy)
+        - [git - Error "Fatal: Not possible to fast-forward, aborting" - Stack Overflow](https://stackoverflowcom/questions/13106179/error-fatal-not-possible-to-fast-forward-aborting)
 
 ------------------------------------------------------------------------------------------------------------
 - Missing new line complained by Pycharm
-    - REF: https://stackoverflow.com/questions/5813311 whats-the-significance-of-the-no-newline-at-end-of-file-log
+    - REF: https://stackoverflow.com/questions/5813311/whats-the-significance-of-the-no-newline-at-end-of-file-log
     - Similar warnings can be seen in the git tools
-    - Cause: historically come back to the Unix system, at that time a new was determined to be a must-have
-    end file character to simplify the process of files. (Imagine add the contents of one file to anothe or
-    concatenate two files together...)
-
+    - Cause: historically come back to the Unix system, at that time a new was determined to be a must-have end file character to simplify the process of files. (Imagine add the contents of one file to another or concatenate two files together...)
 
 ------------------------------------------------------------------------------------------------------------
 - Unsupported bracket in Jelly
