@@ -1,9 +1,8 @@
 ---
-{"dg-publish":true,"permalink":"/0-notes/mit-missing-semester/","noteIcon":"","created":"2024-01-27T07:45:29.549+01:00","updated":"2024-01-27T07:48:22.810+01:00"}
+{"dg-publish":true,"permalink":"/0-notes/mit-missing-semester/","noteIcon":"","created":"2024-01-27T07:45:29.549+01:00","updated":"2024-01-27T07:51:03.824+01:00"}
 ---
 
 ## Lecture 1
-
 ```bash
 mkdir missing && cd missing
 touch semester
@@ -54,7 +53,6 @@ chmod 755 ./semester
 
 ----
 ## Lecture 2
-
 ### Takeaway
 * whitespace in bash scripts indicates for argument splitting
     ```bash
@@ -123,7 +121,6 @@ chmod 755 ./semester
 * finding shell commands: `histor`, `command + R`, `fzf`
 * directory navigation: `fasd`, `autojump`
 * directory structure: `tree`, `broot`
-
 ### Example
 - print all input arguments
     ```bash
@@ -136,7 +133,6 @@ chmod 755 ./semester
         echo "$arg"
     done
     ```
-
 - print date time and pid
     ```bash
     #!/bin/bash
@@ -144,7 +140,6 @@ chmod 755 ./semester
     echo "Starting program at $(date)"
     echo "Running program $0 with $# arguments with PID $$"
     ```
-
 - lecture example
     ```bash
     #!/bin/bash
@@ -164,7 +159,6 @@ chmod 755 ./semester
         fi
     done
     ```
-
 - find
     ```bash
     # find all file with name *.py and save paths into txt file
@@ -181,7 +175,6 @@ chmod 755 ./semester
     # Delete all files with .txt extension under files
     find ./files -name '*.txt' -exec rm {}; \;
     ```
-
 ### Exercise
 #### HW1
 ```bash
