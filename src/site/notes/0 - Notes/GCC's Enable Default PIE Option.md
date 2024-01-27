@@ -1,7 +1,6 @@
 ---
-{"dg-publish":true,"permalink":"/0-notes/gcc-s-enable-default-pie-option/","noteIcon":"","created":"2024-01-27T08:00:10.675+01:00","updated":"2024-01-27T08:00:28.924+01:00"}
+{"dg-publish":true,"permalink":"/0-notes/gcc-s-enable-default-pie-option/","noteIcon":"","created":"2024-01-27T08:00:10.675+01:00","updated":"2024-01-27T08:02:10.417+01:00"}
 ---
-
 
 ## Error Encountered
 `GCC` complanined `/usr/bin/ld: /tmp/cc2l29kd.o: relocation R_X86_64_32S against symbol g can not be used when making a PIE object; recompile with -fPIE`, when linking the following `x86_64` assembly code:
