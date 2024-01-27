@@ -1,7 +1,6 @@
 ---
-{"dg-publish":true,"permalink":"/0-notes/bash-practice/","noteIcon":"","created":"2024-01-27T07:58:35.679+01:00","updated":"2024-01-27T07:58:50.104+01:00"}
+{"dg-publish":true,"permalink":"/0-notes/bash-practice/","noteIcon":"","created":"2024-01-27T07:58:35.679+01:00","updated":"2024-01-27T15:42:13.835+01:00"}
 ---
-
 
 ## Difference between single quotes and double quotes in bash
 ```bash
