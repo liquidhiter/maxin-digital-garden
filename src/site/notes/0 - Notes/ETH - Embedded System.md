@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/0-notes/eth-embedded-system/","noteIcon":"","created":"2024-01-27T07:52:10.084+01:00","updated":"2024-01-27T07:54:39.069+01:00"}
+{"dg-publish":true,"permalink":"/0-notes/eth-embedded-system/","noteIcon":"","created":"2024-01-27T07:52:10.084+01:00","updated":"2024-01-27T07:55:56.470+01:00"}
 ---
 
 ## Lecture 1
@@ -39,7 +39,7 @@ No parity bits
 The low frequency baud rate generation minimizes the energy consumption of the chip, while being a bit more error prone. Therefore, in case the oversampling baud rate generation is available and the energy consumption is not crucial, the oversampling baud should be chosen.
 
 - [TODO] Implement another method of using interrupt for UART
-## Solution
+### Solution
 code is lost after re-installing windows 10 system...
 
 ---
