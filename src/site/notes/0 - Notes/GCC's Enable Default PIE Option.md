@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/0-notes/gcc-s-enable-default-pie-option/","noteIcon":"","created":"2024-01-27T08:00:10.675+01:00","updated":"2024-01-27T08:02:10.417+01:00"}
+{"dg-publish":true,"permalink":"/0-notes/gcc-s-enable-default-pie-option/","noteIcon":"","created":"2024-01-27T08:00:10.675+01:00","updated":"2024-01-27T17:54:37.244+01:00"}
 ---
 
 ## Error Encountered
@@ -54,5 +54,5 @@ The issue can be solved by either of the following ways:
 
 
 ## References
-- [1] : https://nanxiao.me/en/gccs-enable-enable-default-pie-option-make-you-stuck-at-relocation-r_x86_64_32s-against-error/
-- [2] : https://stackoverflow.com/questions/44967075/why-does-this-movss-instruction-use-rip-relative-addressing
+- [x] : https://nanxiao.me/en/gccs-enable-enable-default-pie-option-make-you-stuck-at-relocation-r_x86_64_32s-against-error/ ✅ 2024-01-27
+- [x] : https://stackoverflow.com/questions/44967075/why-does-this-movss-instruction-use-rip-relative-addressing ✅ 2024-01-27
