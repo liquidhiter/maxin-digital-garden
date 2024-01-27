@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-27T08:09:42.334+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-27T17:25:38.907+01:00"}
 ---
 
 
@@ -1801,6 +1801,99 @@ class Solution {
         }
 
         return res;
+    }
+}
+```
+---
+| Leetcode Question | Level | Link |
+| :---------------: | :------: | :----: |
+| 303 |   Easy   | https://leetcode.cn/problems/range-sum-query-immutable/description/ |
+> Naïve Solution
+```java
+class NumArray {
+    int[] nums;
+
+    public NumArray(int[] nums) {
+        this.nums = nums;
+    }
+    
+    public int sumRange(int left, int right) {
+        int sum = 0;
+        for (int i = left; i <= right; ++i) {
+            sum += nums[i];
+        }
+        return sum;
+    }
+}
+```
+> Prefix Sum
+```java
+class NumArray {
+    int[] preNums;
+
+    public NumArray(int[] nums) {
+        preNums = new int[nums.length + 1];
+        preNums[0] = 0;
+        for (int i = 1; i <= nums.length; ++i) {
+            preNums[i] = preNums[i - 1] + nums[i - 1];
+        }
+    }
+    
+    public int sumRange(int left, int right) {
+        return preNums[right + 1] - preNums[left];
+    }
+}
+```
+- `a[i] + a[i+1] + ... + a[j] = sum[j] - sum[i]` 
+	- `right + 1` because the `0th` element in `preNums` is `0` which is needed for `i = 0`
+---
+| Leetcode Question | Level | Link |
+| :---------------: | :------: | :----: |
+| 304 |   Medium   | https://leetcode.cn/problems/range-sum-query-2d-immutable/ |
+> Prefix Sum: rows only
+```java
+class NumMatrix {
+    int[][] preNums;
+
+    public NumMatrix(int[][] matrix) {
+        int rows = matrix.length, cols = matrix[0].length;
+        preNums = new int[rows][cols + 1];
+        /*O(n^2)*/
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 1; j <= cols; ++j) {
+                preNums[i][j] = preNums[i][j - 1] + matrix[i][j - 1];
+            }
+        }
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        /*O(n)*/
+        int sum = 0;
+        for (int i = row1; i <= row2; ++i) {
+            sum += (preNums[i][col2 + 1] - preNums[i][col1]);
+        }
+        return sum;
+    }
+}
+```
+> Prefix Sum: sub-matrixes start from (0, 0)
+```java
+class NumMatrix {
+    int[][] preSums;
+    public NumMatrix(int[][] matrix) {
+        int row = matrix.length, col = matrix[0].length;
+        preSums = new int[row + 1][col + 1];
+        for (int i = 1; i <= row; ++i) {
+            for (int j = 1; j <= col; ++j) {
+	            /*(0, 0, i, j) = (0, 0, i - 1, j) + (0, 0, i, j - 1) + a[i][j] - (0, 0, i-1, j-1)*/
+                preSums[i][j] = preSums[i - 1][j] + preSums[i][j - 1] + matrix[i - 1][j - 1] - preSums[i - 1][j - 1];
+            }
+        }
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+	    /*sub-matrix starts from [0][0]: (0, 0, row2, col2) - (0, 0, row2, col1) - (0, 0, row1, col2) + (0, 0, row1, col1)*/
+        return preSums[row2 + 1][col2 + 1] - preSums[row2 + 1][col1] - preSums[row1][col2 + 1] + preSums[row1][col1];
     }
 }
 ```
