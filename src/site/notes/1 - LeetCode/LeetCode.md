@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-27T17:25:38.907+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-27T18:26:14.208+01:00"}
 ---
 
 
