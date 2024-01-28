@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/introduction/","noteIcon":"","created":"2024-01-28T21:23:05.020+01:00","updated":"2024-01-28T21:58:31.063+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/introduction/","noteIcon":"","created":"2024-01-28T21:23:05.020+01:00","updated":"2024-01-28T22:01:25.137+01:00"}
 ---
 
 ## source
@@ -155,7 +155,7 @@ sconn = namedtuple('sconn', ['fd', 'family', 'type', 'laddr', 'raddr',
 - `namedtuple` is a better option
 	- application scenery: there is **a large amount of fixed / static attributes**
 
-## Python IO and Kernel IO
+## python IO and kernel IO
 - physical files on the disk
 	- e.x. `$HOME/.zshrc`
 - mapped files on the disk
@@ -179,5 +179,5 @@ f.buffer.__sizeof__()
 - ROOT cause:
 	- reading buffer of the virtual files is **4 times** less than the real files, which results in more frequent context switching
 
-## Kernel
+## kernel
 - [ ] #task understand the section related to kernel patch later
