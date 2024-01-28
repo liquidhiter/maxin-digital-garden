@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/introduction/","noteIcon":"","created":"2024-01-28T21:23:05.020+01:00","updated":"2024-01-28T22:01:25.137+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/introduction/","noteIcon":"","created":"2024-01-28T21:23:05.020+01:00","updated":"2024-01-28T22:03:35.821+01:00"}
 ---
 
 ## source
@@ -178,6 +178,7 @@ f.buffer.__sizeof__()
 - [ ] #task I actually don't know the name of this object, i.e. reading buffer object, might be wrong here. Figure out what is the name, and what it is and how it is used
 - ROOT cause:
 	- reading buffer of the virtual files is **4 times** less than the real files, which results in more frequent context switching
+		- [ ] #task what does context switching mean here? Reading another buffer-size amount of date needs what kind of context?
 
 ## kernel
 - [ ] #task understand the section related to kernel patch later
