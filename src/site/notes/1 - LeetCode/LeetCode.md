@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-28T14:25:23.867+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-28T16:08:23.021+01:00"}
 ---
 
 
@@ -1956,6 +1956,63 @@ class Solution {
         }
 
         return -1;
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|                238                    |     Medium      |     https://leetcode.cn/problems/product-of-array-except-self/description/     |
+> Prefix and Suffix Multiplications
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int s = nums.length;
+        /* Prefix Mul */
+        int[] preMuls = new int[s + 1], sufMuls = new int[s + 1];
+        preMuls[0] = 1; sufMuls[0] = 1;
+        for (int i = 1; i <= s; ++i) {
+            preMuls[i] = preMuls[i - 1] * nums[i - 1];
+            sufMuls[i] = sufMuls[i - 1] * nums[s - i];
+        }
+
+        int[] res = new int[s];
+        for (int i = 1; i <= s; ++i) {
+            res[i - 1] = preMuls[i - 1] * sufMuls[s - i];
+        }
+
+        return res;
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|               525                     |     Medium       |     https://labuladong.gitee.io/algo/ds-class/shu-zu-lia-39fd9/qiang-hua--a9442/#_525-%E8%BF%9E%E7%BB%AD%E6%95%B0%E7%BB%84     |
+```java
+class Solution {
+    public int findMaxLength(int[] nums) {
+        int s = nums.length;
+        int[] preSums = new int[s + 1];
+        for (int i = 1; i <= s; ++i) {
+            /* Convert 0 to -1 */
+            preSums[i] = preSums[i - 1] + (nums[i - 1] == 0 ? -1 : 1);
+        }
+
+        /* Now the problem is simplied: equal number of 0 and 1 => sum of the sub-array equals to 0 */
+        HashMap<Integer, Integer> h = new HashMap<>();
+        int res = 0;
+        for (int i = 0; i <= s; ++i) {
+            if (!h.containsKey(preSums[i])) {
+                h.put(preSums[i], i);
+            } else {
+                res = Math.max(res, i - h.get(preSums[i]));
+            }
+        }
+
+        return res;
     }
 }
 ```
