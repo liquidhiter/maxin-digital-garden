@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-27T18:26:14.208+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-28T14:25:23.867+01:00"}
 ---
 
 
@@ -1894,6 +1894,68 @@ class NumMatrix {
     public int sumRegion(int row1, int col1, int row2, int col2) {
 	    /*sub-matrix starts from [0][0]: (0, 0, row2, col2) - (0, 0, row2, col1) - (0, 0, row1, col2) + (0, 0, row1, col1)*/
         return preSums[row2 + 1][col2 + 1] - preSums[row2 + 1][col1] - preSums[row1][col2 + 1] + preSums[row1][col1];
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|             1314                       |     Medium      |    https://leetcode.cn/problems/matrix-block-sum/description/      |
+> Prefix Sum
+```java
+class Solution {
+
+    public int[][] matrixBlockSum(int[][] mat, int k) {
+        int row = mat.length, col = mat[0].length;
+        int[][] preSums = new int[row + 1][col + 1];
+        /* O(n^2) */
+        for (int i = 1; i <= row; ++i) {
+            for (int j = 1; j <= col; ++j) {
+                preSums[i][j] = preSums[i - 1][j] + preSums[i][j - 1] + mat[i - 1][j - 1] - preSums[i - 1][j - 1];
+            }
+        }
+
+        int[][] res = new int[row][col];
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < col; ++j) {
+                int row1 = (i - k) < 0 ? 0 : (i - k);
+                int row2 = (i + k) < row ? (i + k) : (row - 1);
+                int col1 = (j - k) < 0 ? 0 : (j - k);
+                int col2 = (j + k) < col ? (j + k) : (col - 1);
+                res[i][j] = preSums[row2 + 1][col2 + 1] - preSums[row2 + 1][col1] - preSums[row1][col2 + 1] + preSums[row1][col1];
+            }
+        }
+
+        return res;
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|                   724                 |      Easy     |     https://leetcode.cn/problems/find-pivot-index/description/     |
+> Prefix Sum
+```java
+class Solution {
+    public int pivotIndex(int[] nums) {
+        int s = nums.length;
+        int[] preSums = new int[s + 1];
+        for (int i = 1; i <= s; ++i) {
+            preSums[i] = preSums[i - 1] + nums[i - 1];
+        }
+
+        int total = preSums[s];
+        for (int i = 1; i <= s; ++i) {
+            int left = preSums[i - 1];
+            int right = total - preSums[i];
+            if (left == right) {
+                return i - 1;
+            }
+        }
+
+        return -1;
     }
 }
 ```
