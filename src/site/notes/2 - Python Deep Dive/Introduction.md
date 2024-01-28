@@ -1,7 +1,9 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/introduction/","noteIcon":"","created":"2024-01-28T21:23:05.020+01:00","updated":"2024-01-28T21:54:49.496+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/introduction/","noteIcon":"","created":"2024-01-28T21:23:05.020+01:00","updated":"2024-01-28T21:58:31.063+01:00"}
 ---
 
+## source
+- https://fasionchan.com/python-source/preface/story/
 ## procfs
 - reference: https://en.wikipedia.org/wiki/Procfs
 - what
@@ -174,4 +176,8 @@ f.buffer.__sizeof__()
 > 4248 = 4096 + 152, where `152` is the size of the header of reading buffer object
 > 1176   = 1024 + 152=
 - [ ] #task I actually don't know the name of this object, i.e. reading buffer object, might be wrong here. Figure out what is the name, and what it is and how it is used
+- ROOT cause:
+	- reading buffer of the virtual files is **4 times** less than the real files, which results in more frequent context switching
 
+## Kernel
+- [ ] #task understand the section related to kernel patch later
