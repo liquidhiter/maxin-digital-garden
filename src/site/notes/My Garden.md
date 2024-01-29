@@ -1,6 +1,8 @@
 ---
-{"dg-publish":true,"permalink":"/my-garden/","tags":["gardenEntry"],"noteIcon":"","created":"2024-01-26T07:00:51.036+01:00","updated":"2024-01-26T07:20:42.351+01:00"}
+{"dg-publish":true,"permalink":"/my-garden/","tags":["gardenEntry"],"noteIcon":"","created":"2024-01-26T07:00:51.036+01:00","updated":"2024-01-29T20:47:07.592+01:00"}
 ---
+
+![more_is_different.png](/img/user/Z%20-%20assets/images/more_is_different.png)
 
 Welcome to my personal blog.
 
