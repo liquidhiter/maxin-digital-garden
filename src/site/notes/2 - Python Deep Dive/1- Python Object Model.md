@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/1-python-object-model/","noteIcon":"","created":"2024-01-29T06:21:34.847+01:00","updated":"2024-01-29T06:44:32.780+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/1-python-object-model/","noteIcon":"","created":"2024-01-29T06:21:34.847+01:00","updated":"2024-01-29T07:06:14.654+01:00"}
 ---
 
 ## source
@@ -7,7 +7,7 @@ https://fasionchan.com/python-source/object-model/overview/
 
 ## everything is an object
 - no concept of `primitive types`: they are all objects
-```Python3
+```Python
 >>> a = 1
 >>> type(a)
 <class 'int'>
@@ -22,7 +22,7 @@ https://fasionchan.com/python-source/object-model/overview/
 <class 'bool'>
 ```
 - `type` itself is also an `object`
-```Python3
+```Python
 >>> int
 <class 'int'>
 >>> type(int)
@@ -35,7 +35,7 @@ https://fasionchan.com/python-source/object-model/overview/
 ![Pasted image 20240129064059.png](/img/user/Pasted%20image%2020240129064059.png)
 
 - Experiment
-```Python3
+```Python
 >>> class Dog(object):
 ...     def yelp(self):
 ...             print("woof")
@@ -49,6 +49,38 @@ woof
 <class '__main__.Dog'>
 >>> type(Dog)
 <class 'type'>
+
+>>> class Sleuth(Dog):
+...     def yelp(self):
+...             print("shit")
+...
+>>> sleuth = Sleuth()
+>>> sleuth.yelp()
+shit
+>>> type(sleuth.yelp)
+<class 'method'>
+>>> type(Sleuth)
+<class 'type'>
+>>> issubclass(Sleuth, Dog)
+True
+>>> isinstance(sleuth, Dog)
+True
+>>> issubclass(Sleuth, object)
+True
 ```
 > <class 'method'>
 
+- `object` itself is an instance of `type`
+- `type` inherits from `object`
+- `type` itself is an instance of `type`
+```Python
+>>> type(object)
+<class 'type'>
+>>> type(type)
+<class 'type'>
+>>> issubclass(type, object)
+True
+>>> type.__base__
+<class 'object'>
+```
+![Pasted image 20240129070612.png](/img/user/Pasted%20image%2020240129070612.png)
