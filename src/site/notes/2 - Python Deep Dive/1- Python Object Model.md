@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/1-python-object-model/","noteIcon":"","created":"2024-01-29T06:21:34.847+01:00","updated":"2024-01-29T06:33:57.199+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/1-python-object-model/","noteIcon":"","created":"2024-01-29T06:21:34.847+01:00","updated":"2024-01-29T06:44:32.780+01:00"}
 ---
 
 ## source
@@ -27,6 +27,28 @@ https://fasionchan.com/python-source/object-model/overview/
 <class 'int'>
 >>> type(int)
 <class 'type'>
+# int is an instance of the class type, which itself is a class
 ```
 - **type** and **instances** are all **objects** 
 ![Pasted image 20240129063204.png](/img/user/Pasted%20image%2020240129063204.png)
+- all built-in and custom classes inherit from `Object` by default
+![Pasted image 20240129064059.png](/img/user/Pasted%20image%2020240129064059.png)
+
+- Experiment
+```Python3
+>>> class Dog(object):
+...     def yelp(self):
+...             print("woof")
+...
+>>> dog = Dog()
+>>> dog.yelp()
+woof
+>>> type(dog.yelp)
+<class 'method'>
+>>> type(dog)
+<class '__main__.Dog'>
+>>> type(Dog)
+<class 'type'>
+```
+> <class 'method'>
+
