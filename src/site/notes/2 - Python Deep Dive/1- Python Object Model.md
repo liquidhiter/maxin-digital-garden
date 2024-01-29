@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/1-python-object-model/","noteIcon":"","created":"2024-01-29T06:21:34.847+01:00","updated":"2024-01-29T07:06:14.654+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/1-python-object-model/","noteIcon":"","created":"2024-01-29T06:21:34.847+01:00","updated":"2024-01-29T20:50:00.430+01:00"}
 ---
 
 ## source
@@ -30,9 +30,9 @@ https://fasionchan.com/python-source/object-model/overview/
 # int is an instance of the class type, which itself is a class
 ```
 - **type** and **instances** are all **objects** 
-![Pasted image 20240129063204.png](/img/user/Pasted%20image%2020240129063204.png)
+![Z - assets/images/Pasted image 20240129063204.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240129063204.png)
 - all built-in and custom classes inherit from `Object` by default
-![Pasted image 20240129064059.png](/img/user/Pasted%20image%2020240129064059.png)
+![Z - assets/images/Pasted image 20240129064059.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240129064059.png)
 
 - Experiment
 ```Python
@@ -83,4 +83,4 @@ True
 >>> type.__base__
 <class 'object'>
 ```
-![Pasted image 20240129070612.png](/img/user/Pasted%20image%2020240129070612.png)
+![Z - assets/images/Pasted image 20240129070612.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240129070612.png)
