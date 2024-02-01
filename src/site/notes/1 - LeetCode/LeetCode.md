@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-02-01T14:55:39.501+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-02-01T15:05:05.713+01:00"}
 ---
 
 
@@ -2020,7 +2020,7 @@ class Solution {
 ---
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
-|                  525                  |     Medium      |     https://leetcode.cn/problems/continuous-subarray-sum/solutions/1/gong-shui-san-xie-tuo-zhan-wei-qiu-fang-1juse/     |
+|                  523                  |     Medium      |     https://leetcode.cn/problems/continuous-subarray-sum/solutions/1/gong-shui-san-xie-tuo-zhan-wei-qiu-fang-1juse/     |
 > prefix sum
 ```java
 class Solution {
