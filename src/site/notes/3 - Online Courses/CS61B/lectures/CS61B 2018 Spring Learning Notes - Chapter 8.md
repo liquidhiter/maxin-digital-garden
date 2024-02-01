@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/3-online-courses/cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-8/","noteIcon":"","created":"2024-01-31T22:49:21.435+01:00","updated":"2024-01-31T22:56:55.918+01:00"}
+{"dg-publish":true,"permalink":"/3-online-courses/cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-8/","noteIcon":"","created":"2024-01-31T22:49:21.435+01:00","updated":"2024-02-01T12:08:05.427+01:00"}
 ---
 
 ## Topic: Encapsulation, Asymptotic and Amortized Analysis
@@ -93,7 +93,3 @@ public class DelegationStack<Item> {
 
 ### Views
 **Don't think really understand this part**
-![Alt text](image.png)
-![Alt text](image-1.png)
-![Alt text](image-2.png)
-![Alt text](image-3.png)
