@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-01-28T16:08:23.021+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-02-01T14:55:39.501+01:00"}
 ---
 
 
@@ -1991,6 +1991,7 @@ class Solution {
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |               525                     |     Medium       |     https://labuladong.gitee.io/algo/ds-class/shu-zu-lia-39fd9/qiang-hua--a9442/#_525-%E8%BF%9E%E7%BB%AD%E6%95%B0%E7%BB%84     |
+> prefix sum
 ```java
 class Solution {
     public int findMaxLength(int[] nums) {
@@ -2016,3 +2017,50 @@ class Solution {
     }
 }
 ```
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|                  525                  |     Medium      |     https://leetcode.cn/problems/continuous-subarray-sum/solutions/1/gong-shui-san-xie-tuo-zhan-wei-qiu-fang-1juse/     |
+> prefix sum
+```java
+class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {        
+        int s = nums.length;
+        if (s == 1) {
+            return false;
+        }
+
+        int[] preSums = new int[s + 1];
+        for (int i = 1; i <= s; ++i) {
+            preSums[i] = preSums[i - 1] + nums[i - 1];
+        }
+
+        HashMap<Integer, Integer> subSumMod = new HashMap<>();
+        /* (preSums[j] - preSums[i]) % k == 0 => preSums[j] % k == preSums[i] % k */
+        for (int i = 0; i <= s; ++i) {
+            int remain = preSums[i] % k;
+            if (!subSumMod.containsKey(remain)) {
+                subSumMod.put(remain, i);
+            } else {
+                if (i - subSumMod.get(remain) > 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+```
+-  `prefix sum` can be used to calculate the sum of any sub-array
+	- `prefixSums[q] - prefixSums[p]` 
+	- Time Complexity: `O(N)`
+- simplification: `congruence modulo`
+	- Proof
+	```markdown
+	n1 = a1 * k + r1
+	n2 = a2 * k + r2
+	n1 - n2 = (a1 - a2) * k + (r1 - r2)
+	(n1 - n2) % k == 0 => r1 = r2 => n1 and n2 are congruence modulo for k
+	```
