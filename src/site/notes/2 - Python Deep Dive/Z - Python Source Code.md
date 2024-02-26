@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/2-python-deep-dive/z-python-source-code/","noteIcon":"","created":"2024-01-29T23:12:17.367+01:00","updated":"2024-01-30T07:16:57.542+01:00"}
+{"dg-publish":true,"permalink":"/2-python-deep-dive/z-python-source-code/","noteIcon":"","created":"2024-01-29T23:12:17.367+01:00","updated":"2024-02-01T18:27:20.633+01:00"}
 ---
 
 > object.h
@@ -60,6 +60,7 @@ typedef struct {
 - `PyVarObject` contains the field of `PyObject`
 - [ ] #retrospect WHY the `ob_refcnt` and `ob_size` is declared to be `ssize_t`? They can never be negative, right? Or this is to simplify the code?
 
+> PyTypeObject
 ```c
 #ifdef Py_LIMITED_API
 typedef struct _typeobject PyTypeObject; /* opaque */
@@ -167,7 +168,87 @@ typedef struct _typeobject {
 - `reprfunc tp_repr;`
 	- `__str__` and `__repr__` ?
 
+> String Literals
+```c
+/********************* String Literals ****************************************/
+/* This structure helps managing static strings. The basic usage goes like this:
+   Instead of doing
 
+       r = PyObject_CallMethod(o, "foo", "args", ...);
+
+   do
+
+       _Py_IDENTIFIER(foo);
+       ...
+       r = _PyObject_CallMethodId(o, &PyId_foo, "args", ...);
+
+   PyId_foo is a static variable, either on block level or file level. On first
+   usage, the string "foo" is interned, and the structures are linked. On interpreter
+   shutdown, all strings are released (through _PyUnicode_ClearStaticStrings).
+
+   Alternatively, _Py_static_string allows choosing the variable name.
+   _PyUnicode_FromId returns a borrowed reference to the interned string.
+   _PyObject_{Get,Set,Has}AttrId are __getattr__ versions using _Py_Identifier*.
+*/
+typedef struct _Py_Identifier {
+    struct _Py_Identifier *next;
+    const char* string;
+    PyObject *object;
+} _Py_Identifier;
+
+#define _Py_static_string_init(value) { .next = NULL, .string = value, .object = NULL }
+#define _Py_static_string(varname, value)  static _Py_Identifier varname = _Py_static_string_init(value)
+#define _Py_IDENTIFIER(varname) _Py_static_string(PyId_##varname, #varname)
+```
+- is this struct used when there is any static string defined in a Python module?
+	- if yes, this means the `string` in Python is modelled as a `const char*` in C
+		- but, what if the scope of the `string` is local? 
+
+> PyTypeObject of float: PyFloat_Type
+```c
+PyTypeObject PyFloat_Type = {
+    PyVarObject_HEAD_INIT(&PyType_Type, 0)
+    "float",
+    sizeof(PyFloatObject),
+    0,
+    (destructor)float_dealloc,                  /* tp_dealloc */
+    0,                                          /* tp_print */
+    0,                                          /* tp_getattr */
+    0,                                          /* tp_setattr */
+    0,                                          /* tp_reserved */
+    (reprfunc)float_repr,                       /* tp_repr */
+    &float_as_number,                           /* tp_as_number */
+    0,                                          /* tp_as_sequence */
+    0,                                          /* tp_as_mapping */
+    (hashfunc)float_hash,                       /* tp_hash */
+    0,                                          /* tp_call */
+    (reprfunc)float_repr,                       /* tp_str */
+    PyObject_GenericGetAttr,                    /* tp_getattro */
+    0,                                          /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,   /* tp_flags */
+    float_new__doc__,                           /* tp_doc */
+    0,                                          /* tp_traverse */
+    0,                                          /* tp_clear */
+    float_richcompare,                          /* tp_richcompare */
+    0,                                          /* tp_weaklistoffset */
+    0,                                          /* tp_iter */
+    0,                                          /* tp_iternext */
+    float_methods,                              /* tp_methods */
+    0,                                          /* tp_members */
+    float_getset,                               /* tp_getset */
+    0,                                          /* tp_base */
+    0,                                          /* tp_dict */
+    0,                                          /* tp_descr_get */
+    0,                                          /* tp_descr_set */
+    0,                                          /* tp_dictoffset */
+    0,                                          /* tp_init */
+    0,                                          /* tp_alloc */
+    float_new,                                  /* tp_new */
+};
+```
+- `PyFloat_Type` is a `PyVarObject`
+- `PyType_Type` is the instance object of `PyTypeObject`
 
 > pyport.h
 ```c
