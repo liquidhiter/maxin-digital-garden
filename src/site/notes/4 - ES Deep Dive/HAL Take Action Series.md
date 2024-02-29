@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T05:36:42.498+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T06:04:57.163+01:00"}
 ---
 
 ## 零碎知识点
@@ -243,3 +243,18 @@ start   MOV     r1,#10       ; Thumb instructions
 - Unified Assembly Language，UAL，统一汇编语言
 	- 数据处理指令：`Operation{cond}{S} Rd, Rn, Operand2`
 ![Z - assets/images/Pasted image 20240229053249.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240229053249.png)
+- 立即数
+	- `Mov R1, #val`
+		- 指令本身是16或者32位，因此`val`只能是特定数值，也就是立即数
+			- 立即数定义![Z - assets/images/Pasted image 20240229053858.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240229053858.png)
+			- reference: https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/
+	- ARM data processing instruction
+	 ![Z - assets/images/Pasted image 20240229060011.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240229060011.png)
+		- Operand2 is an immediate value, when the Bit25 is set to 1
+		- 4-bit rotation (right circular rotate, why it is right?) and 8-bit number
+			- 4-bit rotation is multiplied by 2 to enlarge the range
+		 ![Z - assets/images/Pasted image 20240229060219.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240229060219.png)
+		 - which values can be represented?
+			 - `0x00 - 0xFF`
+			 - rotated constant must be within `0x00 - 0xFF`
+			 - even rotation
