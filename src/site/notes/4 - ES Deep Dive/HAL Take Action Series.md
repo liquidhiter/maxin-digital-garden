@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T06:04:57.163+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T07:10:33.614+01:00"}
 ---
 
 ## 零碎知识点
@@ -258,3 +258,5 @@ start   MOV     r1,#10       ; Thumb instructions
 			 - `0x00 - 0xFF`
 			 - rotated constant must be within `0x00 - 0xFF`
 			 - even rotation
+		- easy way to check whether the value is an immediate ?
+			- `LDR R0, =VAL`
