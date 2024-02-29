@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T07:10:33.614+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T22:40:37.476+01:00"}
 ---
 
 ## 零碎知识点
@@ -260,3 +260,116 @@ start   MOV     r1,#10       ; Thumb instructions
 			 - even rotation
 		- easy way to check whether the value is an immediate ?
 			- `LDR R0, =VAL`
+
+## 内存访问指令
+> LDR / LDM / STR / STM
+```c
+		MOV		R0, #0x20000
+		MOV		R1, #0x10
+		MOV		R2, #0x12
+		STR		R2, [R0]              ; R2的值存到R0所示地址
+		STR		R2, [R0, #4]          ; R2的值存到R0+4所示地址
+		STR		R2, [R0, #8]!         ; R2的值存到R0+8所示地址, R0=R0+8
+		STR		R2, [R0, R1]          ; R2的值存到R0+R1所示地址
+		STR		R2, [R0, R1, LSL #4]  ; R2的值存到R0+(R1<<4)所示地址
+		STR		R2, [R0], #0X20       ; R2的值存到R0所示地址, R0=R0+0x20
+		MOV		R2, #0x34
+		STR		R2, [R0]              ; R2的值存到R0所示地址
+		LDR		R3, [R0], +R1, LSL #1 ; R3的值等于R0+(R1<<1)所示地址上的值
+```
+- `LSL` - left shift instruction
+```c
+		MOV		R1, #1
+		MOV		R2, #2
+		MOV		R3, #3
+		MOV		R0, #0x20000
+		STMIA	R0,		{R1-R3} ; R1,R2,R3分别存入R0,R0+4,R0+8地址处
+		ADD		R0, R0, #0x10
+		STMIA	R0!, {R1-R3} ; R1,R2,R3分别存入R0,R0+4,R0+8地址处, R0=R0+3*4
+```
+- 低地址内存中存放低序号寄存器中的数值
+	- STMDA (decrease after)![Z - assets/images/Pasted image 20240229213016.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240229213016.png)
+```c
+		MOV		R1, #1
+		MOV		R2, #2
+		MOV		R3, #3
+		MOV		R0, #0x10000
+		STR		R1, [R0]
+		STR		R2, [R0, #4]
+		STR		R3, [R0, #8]
+		LDMIA	R0, {R1-R3}
+```
+- LDMIA![Z - assets/images/Pasted image 20240229213939.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240229213939.png)
+
+## Stack 
+- **4** 种模式的栈
+	- full / empty
+		- full: adjust the stack pointer and then push the data
+		- empty: push the data and then adjust the stack pointer
+	- ascending / descending
+		- ascending: stack pointer increases
+		- descending: stack pointer decreases
+- full ascending / full descending / empty ascending / empty descending
+- most widely used
+	- full descending stack
+```c
+		MOV		R1, #1
+		MOV		R2, #2
+		MOV		R3, #3
+		MOV		SP, #0x20000
+		STMFD	SP!, {R1-R3}
+```
+- `FD` - full descending
+
+## 数据处理指令
+> ADD / SUB / AND / ORR / BIS ...
+```c
+		MOV		R2, #1
+		MOV		R3, #2
+		ADD		R1, R2, #15
+		SUB		R4, R1, R2
+		
+		LDR		R0, =0xFFFFFFFF
+		AND		R0, R0, #0x10
+		LDR		R1, =0xFF00FF00
+		LDR		R2, =0x00FF00FF
+		ORR		R3, R1, R2
+		
+		LDR		R4, =0xFFFFFFFF
+		bic		R4, R4, #0x10
+		
+		CMP		R1, R2
+		MOVNE	R5, #0x1000
+		
+		LDR		R6, =0x10
+		LDR		R7, =0x11
+		TST		R6, R7
+```
+
+## 跳转指令
+```c
+		BL		Delay
+		MOV		R1, #1
+Delay
+		MOV		R0, #5
+Loop
+		SUBS		R0, R0, #1
+		BNE		Loop
+		;		end of the loop
+		MOV		PC, LR
+```
+- 直接使用pc
+```c
+		ADR		LR, Ret
+		ADR		PC, Delay
+Ret
+		MOV		R1, #1
+Delay
+		MOV		R0, #5
+Loop
+		SUBS		R0, R0, #1
+		BNE		Loop
+		;		end of the loop
+		MOV		PC, LR
+```
+> LR register needs to be configured in the beginning before branching into another function
