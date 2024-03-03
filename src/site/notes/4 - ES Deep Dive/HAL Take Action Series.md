@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-02-29T22:40:37.476+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-03T12:29:59.054+01:00"}
 ---
 
 ## 零碎知识点
@@ -373,3 +373,435 @@ Loop
 		MOV		PC, LR
 ```
 > LR register needs to be configured in the beginning before branching into another function
+
+## 伪指令转换
+- 伪指令
+```c
+                LDR     SP, =(0x20000000 + 0x100)
+```
+- 转换后的真正指令
+```c
+    Reset_Handler
+        0x080000b4:    f8dfd004    ....    LDR      sp,[pc,#4] ; [0x80000bc] = 0x20000100
+        0x080000b8:    f000f860    ..`.    BL       main ; 0x800017c
+    $d
+        0x080000bc:    20000100    ...     DCD    536871168
+```
+	- `(0x20000000 + 0x100)`被存入在临时内存中
+	- 伪指令；告诉编译器分配内存中的某个临时地址来存储某个数值？？？
+		- 取决于该数值是否可以表示为立即数
+			- but，SP好像是个exception，LDR指令永远都是暂存某个数值
+- experiment
+ > 立即数
+```c
+				LDR		R0, =0x1000
+--------------------------------------------------------
+        0x080000b4:    f44f5080    O..P    MOV      r0,#0x1000
+```
+> 非立即数
+```c
+				LDR		R0, =0x10011111
+--------------------------------------------------------
+        0x080000b4:    4802        .H      LDR      r0,[pc,#8] ; [0x80000c0] = 0x10011111
+        ......
+        0x080000c0:    10011111    ....    DCD    268505361
+```
+- summary
+	- LDR伪指令
+		- operand是立即数
+			- 直接转换为MOV指令
+		- operand不是立即数
+			- 暂存在某一地址的内存中，并通过读取该内存取得数值
+	- 上述过程取决于架构
+		- 编译器会根据架构来进行机器码和汇编的对应转换
+
+## 不同指令集的机器码
+- Thumb-2 指令集
+![Z - assets/images/Pasted image 20240302174228.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240302174228.png)
+- 对应的机器码
+```c
+0x080000b4:    f8dfd004    ....    LDR      sp,[pc,#4] ; [0x80000bc] = 0x20000100
+--------
+1111,1000,1101,1111,1101,0000,0000,0100
+<Rt> -> SP -> R13 -> 1101
+imm12 -> #4 -> 0000,0000,0100
+```
+
+## ARM 流水线
+- ARMV7 架构
+![Z - assets/images/Pasted image 20240302174708.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240302174708.png)
+> ARM指令集，PC 指向当前地址 + 8
+- ARMV
+![Z - assets/images/Pasted image 20240302174857.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240302174857.png)
+> Thumb指令集，PC指向当前地址 + 4
+![Z - assets/images/Pasted image 20240302175133.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240302175133.png)
+
+## ARM-THUMB Procedure Call Standard
+> define how parameters can be passed to a routine (function)
+- `r0-r3`
+	- caller and callee pass parameters in
+- `r4-r11`
+	- can be used in the function
+	- needs to be pushed before the start of the function, and popped after the function finishes ?
+![Z - assets/images/Pasted image 20240302210044.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240302210044.png)
+
+## 阅读反汇编代码
+- dis-assembly code
+```c
+    mymain
+        0x0800002c:    b580        ..      PUSH     {r7,lr}
+        0x0800002e:    b084        ..      SUB      sp,sp,#0x10
+        0x08000030:    f2410018    A...    MOV      r0,#0x1018
+        0x08000034:    f2c40002    ....    MOVT     r0,#0x4002
+        0x08000038:    9003        ..      STR      r0,[sp,#0xc]
+        0x0800003a:    f2410004    A...    MOV      r0,#0x1004
+        0x0800003e:    f2c40001    ....    MOVT     r0,#0x4001
+        0x08000042:    9002        ..      STR      r0,[sp,#8]
+        0x08000044:    f241000c    A...    MOV      r0,#0x100c
+        0x08000048:    f2c40001    ....    MOVT     r0,#0x4001
+        0x0800004c:    9001        ..      STR      r0,[sp,#4]
+        0x0800004e:    9903        ..      LDR      r1,[sp,#0xc]
+        0x08000050:    6808        .h      LDR      r0,[r1,#0]
+        0x08000052:    f0400010    @...    ORR      r0,r0,#0x10
+        0x08000056:    6008        .`      STR      r0,[r1,#0]
+        0x08000058:    9902        ..      LDR      r1,[sp,#8]
+        0x0800005a:    6808        .h      LDR      r0,[r1,#0]
+        0x0800005c:    f4401080    @...    ORR      r0,r0,#0x100000
+        0x08000060:    6008        .`      STR      r0,[r1,#0]
+        0x08000062:    e7ff        ..      B        0x8000064 ; mymain + 56
+        0x08000064:    9901        ..      LDR      r1,[sp,#4]
+        0x08000066:    6808        .h      LDR      r0,[r1,#0]
+        0x08000068:    f4405000    @..P    ORR      r0,r0,#0x2000
+        0x0800006c:    6008        .`      STR      r0,[r1,#0]
+        0x0800006e:    f24860a0    H..`    MOV      r0,#0x86a0
+        0x08000072:    f2c00001    ....    MOVT     r0,#1
+        0x08000076:    9000        ..      STR      r0,[sp,#0]
+        0x08000078:    f7ffffcc    ....    BL       delay ; 0x8000014
+        0x0800007c:    9800        ..      LDR      r0,[sp,#0]
+        0x0800007e:    9a01        ..      LDR      r2,[sp,#4]
+        0x08000080:    6811        .h      LDR      r1,[r2,#0]
+        0x08000082:    f4215100    !..Q    BIC      r1,r1,#0x2000
+        0x08000086:    6011        .`      STR      r1,[r2,#0]
+        0x08000088:    f7ffffc4    ....    BL       delay ; 0x8000014
+        0x0800008c:    e7ea        ..      B        0x8000064 ; mymain + 56
+        0x0800008e:    0000        ..      MOVS     r0,r0
+```
+- C source code
+```c
+int mymain(void)
+{
+	volatile unsigned int *pRccApb2Enr;
+	volatile unsigned int *pGpiocCrH;
+	volatile unsigned int *pGpiocOdr;
+	
+	pRccApb2Enr = (volatile unsigned int *)RCC_APB2ENR;
+	pGpiocCrH   = (volatile unsigned int *)GPIOC_CRH;
+	pGpiocOdr   = (volatile unsigned int *)GPIOC_ODR;
+	
+	*pRccApb2Enr |= (1<<4);
+	*pGpiocCrH |= (1<<20);
+	while (1)
+	{
+	    *pGpiocOdr |= (unsigned int)(1<<13);
+		delay(100000);
+	    *pGpiocOdr &= (unsigned int)~(1<<13);
+		delay(100000);
+	}
+	return 0;
+}
+```
+
+```c
+        0x0800002c:    b580        ..      PUSH     {r7,lr}
+        ; 0x20000FFC LR
+        ; 0x20000FF8 r7
+        
+        0x0800002e:    b084        ..      SUB      sp,sp,#0x10
+        ; 3 local unsigned int variable，reserve space for them
+        ; sp = 0x20000FE8
+
+        0x08000030:    f2410018    A...    MOV      r0,#0x1018
+        0x08000034:    f2c40002    ....    MOVT     r0,#0x4002
+        0x08000038:    9003        ..      STR      r0,[sp,#0xc]
+        ; save 0x40011018 to 0x20000FF4
+        
+		0x0800003a:    f2410004    A...    MOV      r0,#0x1004
+        0x0800003e:    f2c40001    ....    MOVT     r0,#0x4001
+        0x08000042:    9002        ..      STR      r0,[sp,#8]
+        ; save 0x40011004 to 0x20000FF0
+
+        0x08000044:    f241000c    A...    MOV      r0,#0x100c
+        0x08000048:    f2c40001    ....    MOVT     r0,#0x4001
+        0x0800004c:    9001        ..      STR      r0,[sp,#4]
+        ; save 0x4001100C to 0x20000FEC
+
+	    0x0800004e:    9903        ..      LDR      r1,[sp,#0xc]
+        0x08000050:    6808        .h      LDR      r0,[r1,#0]
+        0x08000052:    f0400010    @...    ORR      r0,r0,#0x10
+		0x08000056:    6008        .`      STR      r0,[r1,#0]
+        ; read the value from the register at the address of 0x40011018
+        ; why first loading to r1 and then r0? instead of directly loading it to r0?
+        ; because the register address is required when loading and saving, r0 is changed
+        ; logic or with 0x10 and save the result to the register
+
+        0x08000058:    9902        ..      LDR      r1,[sp,#8]
+        0x0800005a:    6808        .h      LDR      r0,[r1,#0]
+        0x0800005c:    f4401080    @...    ORR      r0,r0,#0x100000
+        0x08000060:    6008        .`      STR      r0,[r1,#0]
+        ; similar to the code above, but manipulate the register at the address of 0x40011004
+        ; ...
+
+        0x08000062:    e7ff        ..      B        0x8000064 ; mymain + 56
+        ; while loop - first line of code ?
+
+        0x08000064:    9901        ..      LDR      r1,[sp,#4]
+        0x08000066:    6808        .h      LDR      r0,[r1,#0]
+        0x08000068:    f4405000    @..P    ORR      r0,r0,#0x2000
+        0x0800006c:    6008        .`      STR      r0,[r1,#0]
+		; similar to the code above, but manipulate the register at the address of 0x4001100C
+        ; ...
+
+        0x0800006e:    f24860a0    H..`    MOV      r0,#0x86a0
+        0x08000072:    f2c00001    ....    MOVT     r0,#1
+        0x08000076:    9000        ..      STR      r0,[sp,#0]
+        0x08000078:    f7ffffcc    ....    BL       delay ; 0x8000014
+        ; pass the parameters 0x18610
+        ; branch into the delay function
+        ; STR r0, [sp, #0] - optimization ? reuse the 100000 number ?
+
+        0x0800007c:    9800        ..      LDR      r0,[sp,#0]
+        ; restore the value 100000 temporaily saved in the r0 register which
+        ; will be used when calling the delay again ?
+        ; wait, this is actually the parameter (first word) saved for the stack of delay function ?
+    
+        0x0800007e:    9a01        ..      LDR      r2,[sp,#4]
+        0x08000080:    6811        .h      LDR      r1,[r2,#0]
+        0x08000082:    f4215100    !..Q    BIC      r1,r1,#0x2000
+        0x08000086:    6011        .`      STR      r1,[r2,#0]
+        ; clear the 13th bit
+        ; NOTE: compiler optimizes the AND with BIC (simpler)
+
+		0x08000088:    f7ffffc4    ....    BL       delay ; 0x8000014
+		; branch into the delay, with the parameters restored in r0 before
+
+		0x0800008c:    e7ea        ..      B        0x8000064 ; mymain + 56
+		; keep looping in while
+```
+
+```c
+    __Vectors
+        0x08000000:    00000000    ....    DCD    0
+        ; top of stack, SP
+        0x08000004:    08000009    ....    DCD    134217737
+        ; first instruction address pointed by PC
+        ; 0x80000009 = 0x80000008 + 0x1
+        ; last bit is set to 1 to indicate the Thumb instruction sets are used
+```
+
+## 汇编代码blink led
+```c
+                PRESERVE8
+                THUMB
+
+; Vector Table Mapped to Address 0 at Reset
+                AREA    RESET, DATA, READONLY
+                EXPORT  __Vectors
+
+__Vectors       DCD     0			               ; Top of Stack
+                DCD     Reset_Handler              ; Reset Handler
+
+
+                AREA    |.text|, CODE, READONLY
+                
+; Reset handler
+Reset_Handler   PROC
+                EXPORT  Reset_Handler             [WEAK]
+				
+				; Enable GPIO clock
+				LDR		R0, =0x40021018
+				LDR		R1, [R0]
+				ORR		R1, R1, #0x10
+				STR		R1, [R0]
+				
+				; Configure control register
+				LDR		R0, =0x40011004
+				LDR		R1, [R0]
+				ORR		R1, R1, #0x100000
+				STR		R1, [R0]
+Loop
+				; Set output to high
+				LDR		R0, =0x4001100C
+				LDR		R1, [R0]
+				ORR		R1, R1, #0x2000
+				STR		R1, [R0]
+				
+				; Delay
+				LDR		R0, =100000
+				BL		Delay
+				
+				; Set output to low
+				LDR		R0, =0x4001100C
+				LDR		R1, [R0]
+				BIC		R1, R1, #0x2000
+				STR		R1, [R0]
+				
+				; Delay
+				LDR		R0, =100000
+				BL		Delay
+				
+				; Looping ...
+				B Loop
+				ENDP
+
+Delay
+				; decrease R0
+				; compare R0 with 0
+				; loop until R0 = 0
+				SUBS	R0, R0, #1
+				BNE		Delay
+				MOV		PC,	LR
+				
+				END
+```
+
+## LED controlled by the key
+```c
+/*
+ * Address of the PB14 and PC13
+ */
+#define RCC_APB2ENR (0x40021000 + 0x18)
+
+#define GPIOC_BASE  (0x40011000)
+#define GPIOC_CRH   (GPIOC_BASE + 0x04)
+#define GPIOC_ODR   (GPIOC_BASE + 0X0C)
+
+#define GPIOB_BASE  (0x40010C00)
+#define GPIOB_CRH   (GPIOB_BASE + 0x04)
+#define GPIOB_IDR   (GPIOB_BASE + 0x08)
+
+/** Main Entry
+ * @brief  
+ * @note   
+ * @param  argc: 
+ * @param  argv: 
+ * @retval 
+ */
+int main(void)
+{
+    volatile unsigned int *pRccApb2En;
+    volatile unsigned int *pGpioCCtrH;
+    volatile unsigned int *pGpioCOdr;
+    
+    volatile unsigned int *pGpioBCtrH;
+    volatile unsigned int *pGpioBIdr;
+
+    pRccApb2En = (volatile unsigned int *)RCC_APB2ENR;
+    pGpioCCtrH = (volatile unsigned int *)GPIOC_CRH;
+    pGpioCOdr = (volatile unsigned int *)GPIOC_ODR;
+
+    pGpioBCtrH = (volatile unsigned int *)GPIOB_CRH;
+    pGpioBIdr = (volatile unsigned int *)GPIOB_IDR;
+
+    /* Enable the clock for IOPB and IOPC */
+    *pRccApb2En |= (1<<3) | (1<<4);
+
+    /* Configure PC13 to be output */
+    *pGpioCCtrH |= (1<<20);
+
+    /* Configure PB14 to be floating input */
+    *pGpioBCtrH &= (0x00<<24);
+    *pGpioBCtrH |= (0x01<<26);
+
+    /* main loop */
+    while (1)
+    {
+        /* Read the key input register */
+        int keyEn = (*pGpioBIdr) & (1<<14);
+        if (keyEn == 0)
+        {
+			/* Set the PC13 output to be low */
+            *pGpioCOdr &= (unsigned int)~(1<<13);
+        }
+        else
+        {
+            /* Set the PC13 output to be high */
+            *pGpioCOdr |= (unsigned int)(1<<13);
+        }
+    }
+
+    return 0;
+}
+```
+> assembly
+```c
+                PRESERVE8
+                THUMB
+
+
+; Vector Table Mapped to Address 0 at Reset
+                AREA    RESET, DATA, READONLY
+                EXPORT  __Vectors
+
+__Vectors       DCD     0			               ; Top of Stack
+                DCD     Reset_Handler              ; Reset Handler
+
+
+                AREA    |.text|, CODE, READONLY
+                
+; Reset handler
+Reset_Handler   PROC
+                EXPORT  Reset_Handler             [WEAK]
+				
+				; Enable the clock for IOPB and IOPC
+				LDR		R0, =0x40021018
+				LDR		R1, [R0]
+				ORR		R1, R1, #(1<<3)
+				ORR		R1, R1, #(1<<4)
+				STR		R1, [R0]
+				
+				; Configure PC13 to be output
+				LDR		R0, =0x40011004
+				LDR		R1, [R0]
+				ORR		R1, R1, #0x100000
+				STR		R1, [R0]
+				
+				; Configure PB14 to be input
+				LDR		R0, =0x40010C04
+				LDR		R1, [R0]
+				AND		R1, R1, #(0x00<<24)
+				ORR		R1, R1, #(0x01<<26)
+				STR		R1, [R0]
+
+Loop
+				; Read the PB14 input register
+				LDR		R0, =0x40010C08
+				LDR		R1, [R0]
+				AND		R1, R1, #(1<<14)
+				CBNZ	R1, LED_OFF
+				;B		LED_ON
+				; Set PC13 output to be low
+				LDR		R0, =0x4001100C
+				LDR		R1, [R0]
+				BIC		R1, R1, #0x2000
+				STR		R1, [R0]
+				
+				; Continue looping
+				B 		Loop
+
+LED_OFF
+				; Set PC13 output to be high
+				LDR		R0, =0x4001100C
+				LDR		R1, [R0]
+				ORR		R1, R1, #0x2000
+				STR		R1, [R0]
+				
+				; Continue looping
+				B		Loop
+
+                ENDP
+
+				END
+```
+- `CBNZ`
+	- compare and branch on non-zero
+	- reference: [ARM Compiler toolchain Assembler Reference Version 5.03](https://developer.arm.com/documentation/dui0489/i/arm-and-thumb-instructions/cbz-and-cbnz)
