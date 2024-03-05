@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-03T12:29:59.054+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-05T22:31:06.431+01:00"}
 ---
 
 ## 零碎知识点
@@ -805,3 +805,328 @@ LED_OFF
 - `CBNZ`
 	- compare and branch on non-zero
 	- reference: [ARM Compiler toolchain Assembler Reference Version 5.03](https://developer.arm.com/documentation/dui0489/i/arm-and-thumb-instructions/cbz-and-cbnz)
+
+## UART
+- `Universal Asynchronous Receiver and Transmitter`
+- three-wire connection
+	- TXD
+	- RXD
+	- GND
+- typical connection
+![Z - assets/images/Pasted image 20240303150849.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303150849.png)
+- configuration parameters
+	- baud rate
+	- packet frame
+		- data bits
+		- stop bits
+		- parity bit
+		- flow control 
+- transmission process
+![Z - assets/images/Pasted image 20240303151708.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303151708.png)
+- ARM: start bit is the logic `0`
+- client在数据位的中间读取引脚数据
+	- 开始传输数据的时刻
+	- 每一位数据的传输时间 （baud rate约束）
+	- 当前数据的位数
+- 校验位
+	- 数据位 + 校验位
+	- 奇偶校验
+	- why：早期电子技术不够完善，传输信号质量
+		- 现代嵌入式系统中，电子传输信号质量较高，这一校验位可以省去
+- 停止位
+	- 高电平（相对起始位是低电平）
+	- 持续时间可配置，例如1位时间
+- 逻辑电平
+![Z - assets/images/Pasted image 20240303152529.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303152529.png)
+- `RS-232`: 适合远距离传输，PC机中广泛使用
+- `TTL`: ARM设备中使用
+- `TTL/CMOS` -> `RS-232`: 电平转换芯片，通常是集成在嵌入式开发板上
+![Z - assets/images/Pasted image 20240303161056.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303161056.png)
+- experiment
+> uart.h
+```c
+#ifndef UART_H_
+#define UART_H_
+
+/* ======================= typedefs ========================== */
+typedef unsigned int uint32_t ;
+
+/* Easy manipulation of USART registers */
+typedef struct
+{
+    volatile uint32_t SR;    /*!< USART Status register, Address offset: 0x00 */
+    volatile uint32_t DR;    /*!< USART Data register,   Address offset: 0x04 */
+    volatile uint32_t BRR;   /*!< USART Baud rate register, Address offset: 0x08 */
+    volatile uint32_t CR1;   /*!< USART Control register 1, Address offset: 0x0C */
+    volatile uint32_t CR2;   /*!< USART Control register 2, Address offset: 0x10 */
+    volatile uint32_t CR3;   /*!< USART Control register 3, Address offset: 0x14 */
+    volatile uint32_t GTPR;  /*!< USART Guard time and prescaler register, Address offset: 0x18 */
+} USART;
+
+/* ======================= prototypes ========================== */
+void uart_init(void);
+int uart_send(char c);
+int uart_get(void);
+
+#endif
+
+```
+> uart.c
+```c
+/*====================== includes ========================== */
+#include "uart.h"
+
+/* ======================= defines ========================== */
+#define USART1_BASE_ADDR 0x40013800
+#define RCC_APB2ENR	(0x40021000 + 0x18)
+#define GPIOA_BASE (0x40010800)
+#define GPIOA_CRH (GPIOA_BASE + 0x04)
+#define _IO (volatile uint32_t *)
+#define USART1_DIV_MANTISSA 4U
+#define USART1_DIV_FRACTION 5U
+
+/* ======================= functions ========================== */
+
+/**!SECTION: UART Initialization
+ * @brief  Initialize UART
+ */
+void uart_init(void)
+{
+    /* USART1 */
+    volatile USART *pUSART1 = (volatile USART *)USART1_BASE_ADDR;
+
+    volatile uint32_t *pRCCAPB2ENR =  (volatile uint32_t *) RCC_APB2ENR;
+    volatile uint32_t *pGPIOACRH =  (volatile uint32_t *) GPIOA_CRH;
+    
+    /* Enable clock for USART1  */
+    *pRCCAPB2ENR |= (1U << 2) | (1U << 14);
+
+    /* Configure PA9  to output mode USART1 */
+    *pGPIOACRH &= ~((3U << 4) | (3U << 6)); /* Reset value is 0x4444,4444, clear bits to ensure no conflicts */
+    *pGPIOACRH |= (1U << 4) | (2U << 6); /* MODE(0x01): output mode, max speed 10 MHz, CNF(0x10): push-pull ? */
+
+    /* Configure PA10 to input mode USART1 */
+    *pGPIOACRH &= ~((3U << 8) | (3U << 10)); /* Reset value is 0x4444,4444, clear bits to ensure no conflicts */
+    *pGPIOACRH |= (0U << 8) | (1U << 10); /* MODE(0x00): input mode, CNF(0x01): floating input ? */
+
+    /* Set baud rate 
+     * 115200 = 8M (fclk) / 16 / USARTDIV
+     * USARTDIV = 4.34
+     * DIV_Mantissa = 4
+     * DIV_Fraction = 0.34 * 16 = 5.44 = 5
+     * Actual baud rate = 115942
+     */
+    pUSART1->BRR = (USART1_DIV_MANTISSA << 4) | (USART1_DIV_FRACTION);
+
+    /* Set data frame and enable the USART1 */
+    pUSART1->CR1 = (1U << 13) | (0U << 12) | (0U << 10) | (1U << 3) | (1U << 2);
+    pUSART1->CR2 &= ~(3U << 12);
+}
+
+/**!SECTION UART send 
+ * 
+*/
+int uart_send(char c)
+{
+    /* USART1 */
+    volatile USART *pUSART1 = (volatile USART *)USART1_BASE_ADDR;
+
+    /* Wait until the data in the TX buffer have been sent to the shift register */
+    while  ((pUSART1->SR & (1U << 7)) == 0);
+
+    /* Put data into the TX buffer */
+    pUSART1->DR = c;
+
+    return c;
+}
+
+/**!SECTION UART receive
+ * 
+ */
+int uart_get(void)
+{
+    /* USART1 */
+    volatile USART *pUSART1 = (volatile USART *)USART1_BASE_ADDR;
+
+    /* Wait until the data in the RX buffer are ready to read */
+    while ((pUSART1->SR & (1U << 5)) == 0);
+
+    return pUSART1->DR & 0xFF;
+}
+```
+> main.c
+```c
+/*====================== includes ========================== */
+#include "uart.h"
+
+/* ======================= defines ========================== */
+#define SIZE_OF_ARRAY(x) (sizeof(x) / sizeof(x[0]))
+#define size_t unsigned int
+
+/* ======================= globals ========================== */
+/* Can't use global variable ? */
+// static USART *pUSART1 = (USART *)USART1_BASE_ADDR;
+
+int main(void)
+{
+    const char pData[] = "Sending from Maxin's powerful desktop!\n\r";
+    unsigned int lenOfData = SIZE_OF_ARRAY(pData);
+
+    /* Initialize UART */
+    uart_init();
+
+    /* Send all characters one by one */
+    for (size_t i = 0; i < lenOfData; ++i)
+    {
+        uart_send(pData[i]);
+    }
+
+    return 0;
+}
+```
+
+## Find the stdlib used in GCC
+```bash
+echo 'main(){}'| gcc -E -v -
+```
+
+## Code relocate
+> experiment
+```c
+/*====================== includes ========================== */
+#include "util.h"
+#include "uart.h"
+#include "string.h"
+
+/* ======================= globals ========================== */
+/* Can't use global variable ? */
+// static USART *pUSART1 = (USART *)USART1_BASE_ADDR;
+char g_Char = 'A';
+const char g_CharConst = 'B';
+const char RECEIVED_MSG[] = "Received => ";
+
+/* ======================= defines ========================== */
+#define SIZE_OF_ARRAY(x) (sizeof(x) / sizeof(x[0]))
+#define size_t unsigned int
+	
+static inline void uart_receive(void)
+{
+		uart_print(RECEIVED_MSG, SIZE_OF_ARRAY(RECEIVED_MSG));
+}
+
+static inline void uart_println(const char c)
+{
+		/* Send the given char */
+		uart_send(c);
+		/* Move the cursor to the start of the next line */
+		uart_send('\n');
+		uart_send('\r');
+}
+
+int main(void)
+{
+    const char pData[] = "Sending from Maxin's powerful desktop!\n\r";
+    unsigned int lenOfData = SIZE_OF_ARRAY(pData);
+		char c;
+
+    /* Initialize UART */
+    uart_init();
+	
+		/* Send two global char */
+		uart_println(g_Char);
+		uart_println(g_CharConst);
+	
+		/* Print the addresses of two global objects */
+		put_s_hex("Address of g_Char = ", (void*)&g_Char - (void*)0);
+		put_s_hex("Address of g_CharConst = ", (void*)&g_CharConst - (void*)0);
+	
+
+#if 0
+    /* Send all characters one by one */
+    for (size_t i = 0; i < lenOfData; ++i)
+    {
+        uart_send(pData[i]);
+    }
+#endif
+		
+		while (1)
+		{
+				/* Fetch received characters */
+				c = uart_get();
+				/* Print "Received => " to improve readability */
+			  uart_receive();
+				uart_println(c);
+		}
+
+    return 0;
+}
+
+```
+- `uart_println(g_Char);` doesn't print the character of `A`
+- address of global objects (const VS non-const)![Z - assets/images/Pasted image 20240303211515.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303211515.png)
+	- `g_Char`: saved in `RAM`
+		- uninitialized, no default value
+			- **that's why A doesn't appear!!!**
+	- `g_CharConst`": saved in `ROM`
+		- initialized, default value as assigned
+- different code section ![Z - assets/images/Pasted image 20240303211628.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303211628.png)
+	- `rodata` VS `data`
+- `start.s` needs to do more
+	- 重定位
+		- 代码重定位
+			- 代码烧录到ROM中
+		- 数据重定位
+			- 将ROM程序中可读可写的全局变量复制到RAM中（包含初始值）
+![Z - assets/images/Pasted image 20240303212538.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240303212538.png)
+- scatter file
+```c
+LR_IROM1 0x08000000 0x00010000  {    ; load region size_region
+  ER_IROM1 0x08000000 0x00010000  {  ; load address = execution address
+   *.o (RESET, +First)
+   *(InRoot$$Sections)
+   .ANY (+RO)
+   .ANY (+XO)
+  }
+  RW_IRAM1 0x20000000 0x00005000  {  ; RW data
+   .ANY (+RW +ZI)
+  }
+}
+```
+
+- load address
+	- execution address
+		- relocate if load address != execution address
+- `*.o (RESET, +First)` 
+	- all `RESET` sections contained in object files (*.o)
+		- to be placed at the beginning of this region (`ER_IROM1`)
+		- ONLY found this in `start.o`
+```c
+                AREA    RESET, DATA, READONLY
+                EXPORT  __Vectors
+
+__Vectors       DCD     0			               ; Top of Stack
+                DCD     Reset_Handler              ; Reset Handler
+
+  RW_IRAM1 0x20000000 0x00005000  {  ; RW data
+   .ANY (+RW +ZI)
+  }
+}
+```
+- 保存在RAM中的全局变量未进行初始化的原因
+	- reference: [[012] [STM32] 代码重定位与清除BSS段深入分析_stm32 0x20001000-CSDN博客](https://blog.csdn.net/kouxi1/article/details/123492797)
+```markdown
+MDK环境下，STM32启动文件中的__main帮我们做了重定位等一系列操作，如果不使用编译器提供的__main函数（主函数名称为main也会默认调用__main），则**RW-DATA中变量的值仅保存在ROM中**，没有将值复制到RAM中，但程序访问变量时，是去从该变量所在RAM内存地址处加载值的，但此地址却并未初始化，所以读取的数值为junk。
+```
+
+> .bss清零
+- 全局变量
+	- 无initializer
+	- 数值为0的initializer
+- 取决于变量占用的空间 - Keil环境下的优化
+	- 超过8Bytes，编译器会将其放置在.bss
+	- 不然，编译器会将其放置在.data
+![Z - assets/images/Pasted image 20240305213406.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240305213406.png)
+![Z - assets/images/Pasted image 20240305213504.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240305213504.png)
+- 实际观察到，即使变量占据空间小于8Bytes，编译器还是将其放置在.bss段？
+- **BSS段并不会放入bin文件中，否则也太浪费空间了，在使用BSS段里的变量之前，把BSS段所占据的内存清零就可以了。**
+	- 执行地址，位于内存中（RAM）
