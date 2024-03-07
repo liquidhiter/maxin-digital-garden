@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-05T23:33:59.728+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-06T22:06:10.483+01:00"}
 ---
 
 ## 零碎知识点
@@ -1270,3 +1270,136 @@ void systemInit(void)
 }
 ```
 - 参考: `section: 6.3.7 Methods of importing linker-defined symbols in C and C++` in `DUI0803J_armlink_user_guide.pdf`
+
+## 中断与异常
+![Z - assets/images/Pasted image 20240306065252.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240306065252.png)
+- 中断也是异常的
+	- CPU不是运行在正常执行指令的状态下
+```markdown
+* 初始化
+  * 设置中断源，让它可以产生中断
+  * 设置中断控制器(可以屏蔽某个中断，优先级)
+  * 设置CPU总开关，使能中断
+
+* 执行其他程序：正常程序
+* 产生中断，举例：按下按键--->中断控制器--->CPU
+* cpu每执行完一条指令都会检查有无中断/异常产生
+* 发现有中断/异常产生，开始处理：
+  * 保存现场
+  * 分辨异常/中断，调用对于异常/中断的处理函数
+  * 恢复现场
+```
+- `cpu每执行完一条指令都会检查有无中断/异常产生`
+	- 中断控制器？
+- 保存和恢复现场, 分辨中断源
+	- 硬件实现，e.x. M3 / M4
+		- 向量表中保存的是中断函数的地址
+		- 主要是定义中断函数
+	- 软件实现, e.x. A7
+		- 向量表中保存的是跳转指令
+		- CPU进入相应的异常模式，运行对应的跳转指令（如何选择？）
+			- 软件实现对于中断源的分辨，现场的保存以及恢复
+
+## 硬件保存现场
+- 调用者保存的寄存器
+	- `R0 - R3, R12, LR, PSR`
+- 被调用者保存的寄存器
+	- `R4 - R11`
+- 保存现场时需要保存的寄存器
+	- 理解：调用中断函数前进行保存，也就是调用者需要保存
+	- `R0 - R3, R12, LR, PSR`
+	- `PC`
+		- 流水线特性，也就是下一条指令地址，返回地址
+- `M3 / M4` 在调用异常处理函数前，会把`LR`设置为特殊值，称为`EXC_RETURN`
+	- **`0xF0000000 ~ 0xFFFFFFFF`在ARM中被定义为不可执行地址区域**
+- 硬件异常返回机制
+	- `PC`寄存器中值为`EXC_RETURN`，恢复保存的寄存器值
+- `EXC_RETURN` bit 2定义了哪个栈用来保存现场
+	- `M3 / M4`有两个栈
+		- 主栈
+		- 线程栈
+- Cortex A7
+	- 不同模式下都有各自的`banked`寄存器
+		- 节省了保存相应寄存器的时间
+		- 都有属于自己的栈
+			- 保存现场在对应模式的自己的栈中
+
+## Experiment: UsageFault
+- `Configurable fault status register (SCB_CFSR)`
+	- `Bit 16 UNDEFINSTR: Undefined instruction usage fault:` 
+		- **When this bit is set to 1, the PC value stacked for the exception return points to the undefined instruction.**
+			- that's to say, this bit needs to be cleared, otherwise, the exception keeps happening because the LR always points to the undefined instruction ?
+		- **The UFSR bits are sticky. This means as one or more fault occurs, the associated bits are set to 1. A bit that is set to 1 is cleared to 0 only by writing 1 to that bit, or by a reset.**
+			- this explains why `pSCB->CFSR |= pSCB->CFSR;` does the job!
+![Z - assets/images/Pasted image 20240306220343.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240306220343.png)
+```c
+                PRESERVE8
+                THUMB
+
+; Vector Table Mapped to Address 0 at Reset
+                AREA    RESET, DATA, READONLY
+                EXPORT  __Vectors
+				IMPORT	HardFault_Handler
+				IMPORT  UsageFault_Handler
+
+__Vectors       DCD     0			               ; Top of Stack
+                DCD     0x08000009 ;Reset_Handler              ; Reset Handler
+				DCD     0                ; NMI Handler
+                DCD     HardFault_Handler          ; Hard Fault Handler
+                DCD     0          ; MPU Fault Handler
+                DCD     0           ; Bus Fault Handler
+                DCD     UsageFault_Handler_ASM         ; Usage Fault Handler
+                DCD     0                          ; Reserved
+                DCD     0                          ; Reserved
+                DCD     0                          ; Reserved
+                DCD     0                          ; Reserved
+                DCD     0                ; SVCall Handler
+                DCD     0           ; Debug Monitor Handler
+                DCD     0                          ; Reserved
+                DCD     0             ; PendSV Handler
+                DCD     0            ; SysTick Handler
+				
+
+                AREA    |.text|, CODE, READONLY
+
+; Reset handler
+Reset_Handler   PROC
+                EXPORT  Reset_Handler             [WEAK]				
+				IMPORT  mymain
+				IMPORT  systemInit
+				IMPORT	uart_init
+				IMPORT	UsageFaultEnable
+				
+				; Set stack top address
+                LDR     SP, =(0x20000000 + 0x1000)
+				
+				BL		uart_init
+				BL		UsageFaultEnable
+				
+				; Experiment to see certain registers are saved
+				LDR		R0, =0x00000001
+				LDR		R1, =0x00000010
+				LDR		R2, =0x00000100
+				LDR		R3, =0x00001000
+				LDR		R12, =0x00010000
+				LDR		LR, =0x00100000 
+
+				DCD		0xFFFFFFFF
+								
+                ;BL		mymain
+                LDR		R0, =mymain
+				BLX		R0
+				
+				ENDP
+
+; UsageFault_Handler with stack as the argument
+UsageFault_Handler_ASM PROC
+				; To not override EXC_RETURN value saved in the LR register when jumping into the exception handler
+				MOV	R0,	SP
+				B UsageFault_Handler
+				ENDP
+
+				END
+```
+- **NOTE**: `B UsageFault_Handler` is used to not overwrite the special value of `EXC_RETURN` saved in the `LR` register
+	- difference between `B` and `BL`
