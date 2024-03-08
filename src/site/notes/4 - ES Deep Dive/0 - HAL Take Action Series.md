@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-06T22:06:10.483+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-07T23:16:52.408+01:00"}
 ---
 
 ## 零碎知识点
@@ -1403,3 +1403,12 @@ UsageFault_Handler_ASM PROC
 ```
 - **NOTE**: `B UsageFault_Handler` is used to not overwrite the special value of `EXC_RETURN` saved in the `LR` register
 	- difference between `B` and `BL`
+
+## Experiment SVCallFault
+- different from the usagefault
+	- PC doesn't stuck at the undefined instruction which causes the exception
+		- but instead points to the next instruction
+![Z - assets/images/Pasted image 20240307231418.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240307231418.png)
+- associated map file
+![Z - assets/images/Pasted image 20240307231513.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240307231513.png)
+- Linux系统中使用SVC指令，故意触发异常处理函数，从而进入内核态来调用各种系统服务
