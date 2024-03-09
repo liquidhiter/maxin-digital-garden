@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-07T23:16:52.408+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-09T21:13:33.914+01:00"}
 ---
 
 ## 零碎知识点
@@ -1412,3 +1412,92 @@ UsageFault_Handler_ASM PROC
 - associated map file
 ![Z - assets/images/Pasted image 20240307231513.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240307231513.png)
 - Linux系统中使用SVC指令，故意触发异常处理函数，从而进入内核态来调用各种系统服务
+
+
+## SysTick
+- count-down counter on STM32F103X
+- generate a periodic exception which can be used by the OS for task slicing algorithm use
+```c
+void SysTick_Init(void)
+{
+    SysTick_S *pSysTick = (SysTick_S*)SYSTICK_BASE;
+
+    /* Set the current value */
+    pSysTick->STK_VAL = SYSTICK_8M_1S_RELOAD_VAL;
+
+    /* Set the reload register */
+    pSysTick->STK_LOAD = SYSTICK_8M_1S_RELOAD_VAL;
+
+    /* Set the clock source and enable the SysTick
+     * 1U<<2: Processor clock (AHB)
+     * 1U<<1: Counting down to zero to asserts the SysTick exception request
+     * 1U<<0: Counter enabled
+     */
+    pSysTick->STK_CTRL |= (1U << 2) | (1U << 1) | (1U << 0);
+}
+
+void SysTick_Handler(void)
+{
+		puts("SysTick_Handler\n\r");
+    
+	  SCB_Type *pSCB = (SCB_Type *)SCB_BASE_ADDR;
+    /* Toggle the LED */
+    static int led_on = 0;
+    if (led_on)
+    {
+        /* Turn off the LED */
+        LED_Toggle(0);
+    }
+    else
+    {
+        /* Turn on the LED */
+        LED_Toggle(1);
+    }
+    
+    led_on = !led_on;
+
+    /* Clear the exception status */
+    pSCB->ICSR |= (1U << 25);
+}
+```
+
+## 中断
+- 中断的flow
+	1. 中断源
+	2. 中断控制器
+		- NVIC
+			- example
+![Z - assets/images/Pasted image 20240309102334.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240309102334.png)
+		- GIC
+			- example：多核处理器
+![Z - assets/images/Pasted image 20240308232313.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240308232313.png)
+	3. CPU
+		- CPU如何在执行完成某条指令后进行对中断的检测？
+> 只能使能单一GPIO的外部中断
+![Z - assets/images/Pasted image 20240308234422.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240308234422.png)
+
+- 读取 `Pending Request Register` 来判断
+	- 是否有中断发生
+	- 发生了哪个中断
+- example implementation of the `EXTI15_10_IRQHandler`
+```c
+void EXTI15_10_IRQHandler(void)
+{
+    //puts("EXTI15_10_IRQHandler\n\r");
+    if (!KEY_Inspect())
+    {
+        puts("\x1b[31m KEY[PB14] is pressed!\n\r \x1b[0m");
+    }
+    else
+    {
+        puts("\x1b[32m KEY[PB14] is released!\n\r \x1b[0m");
+    }
+
+    /* Clear the pending interrupt
+     * NOTE: both EXTI and NVIC have the interrupt pending status registers
+     *       which need to be cleared both
+     */
+    EXTI_Clear_IRQ();
+    NVIC_ClearIRQ();
+}
+```
