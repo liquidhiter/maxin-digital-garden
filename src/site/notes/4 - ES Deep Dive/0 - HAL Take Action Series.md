@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/4-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-09T21:13:33.914+01:00"}
+{"dg-publish":true,"permalink":"/4-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-09T21:20:34.857+01:00"}
 ---
 
 ## 零碎知识点
@@ -68,7 +68,6 @@ void SystemInit (void)
 }
 ```
 - does the order of `__main` and `SystemInit` matter ?
-
 
 - CPU direct access to NorFlash
 - CPU can't directly access to
@@ -869,7 +868,6 @@ int uart_send(char c);
 int uart_get(void);
 
 #endif
-
 ```
 > uart.c
 ```c
@@ -936,7 +934,7 @@ int uart_send(char c)
 
     /* Put data into the TX buffer */
     pUSART1->DR = c;
-
+ 
     return c;
 }
 
