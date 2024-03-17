@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-9/","noteIcon":"","created":"2024-03-16T22:13:52.560+01:00","updated":"2024-03-17T11:20:21.671+01:00"}
+{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-9/","noteIcon":"","created":"2024-03-16T22:13:52.560+01:00","updated":"2024-03-17T11:21:49.992+01:00"}
 ---
 
 ## Materials
@@ -259,3 +259,5 @@ public class WeightedQuickUnionWithPathCompression implements DisjointSets{
     }
 }
 ```
+![Z - assets/images/Pasted image 20240317112106.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240317112106.png)
+- solved by the path compression
