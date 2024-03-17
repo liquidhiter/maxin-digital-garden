@@ -1,11 +1,8 @@
 ---
-{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-9/","noteIcon":"","created":"2024-03-16T22:13:52.560+01:00","updated":"2024-03-17T11:24:08.213+01:00"}
+{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-9/","noteIcon":"","created":"2024-03-16T22:13:52.560+01:00","updated":"2024-03-17T11:26:21.883+01:00"}
 ---
 
-## Materials
-![[Z - assets/pdfs/cs61B/cs61b_2018_lec20_ disjoint_sets.pdf]]
-
-## Experiment
+## Slides
 <iframe src="https://docs.google.com/presentation/d/1J7q2RImSbg26vrWMaYQwYo6_zPDrrdGRmwm_U2oY20s/edit#slide=id.g11d1bfb9b0_11_110" width="700" height="1000" ></iframe>
 
 ## Topic: Disjoint Sets
