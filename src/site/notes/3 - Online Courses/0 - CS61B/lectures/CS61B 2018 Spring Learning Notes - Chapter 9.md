@@ -1,6 +1,9 @@
 ---
-{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-9/","noteIcon":"","created":"2024-03-16T22:13:52.560+01:00","updated":"2024-03-17T07:23:42.717+01:00"}
+{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-9/","noteIcon":"","created":"2024-03-16T22:13:52.560+01:00","updated":"2024-03-17T11:20:21.671+01:00"}
 ---
+
+## Materials
+![[Z - assets/pdfs/cs61B/cs61b_2018_lec20_ disjoint_sets.pdf]]
 
 ## Topic: Disjoint Sets
 - definition of a disjoint set
@@ -132,8 +135,7 @@ public class QuickUnionDS implements DisjointSets {
 		- O(N) in the worst case
 			- imbalanced tree
 
-###
-
+### Weighted Quick Union
 
 ![Z - assets/images/Pasted image 20240317071349.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240317071349.png)
 - smaller height
@@ -142,3 +144,118 @@ public class QuickUnionDS implements DisjointSets {
 	- **tracking the tree's size** works asymptotically
 - RULE
 	- *link* root of smaller tree to larger tree
+```java
+public class WeightedQuickUnion implements DisjointSets {
+    int parents[];
+    int sizes[];
+
+    public WeightedQuickUnion(int N) {
+        for (int i = 0; i < N; i++) {
+            parents[i] = -1;
+            sizes[i] = 1;
+        }
+    }
+
+    public int findRoot(int p) {
+        while(parents[p] >= 0) {
+            p = parents[p];
+        }
+        return p;
+    }
+
+    public void connect(int p, int q) {
+        int rootP = findRoot(p);
+        int rootQ = findRoot(q);
+        if (rootP == rootQ) return;
+        
+        if (sizes[rootP] < sizes[rootQ]) {
+            parents[rootP] = rootQ;
+            sizes[rootQ] += sizes[rootP];
+        } else {
+            /* Including tie */
+            parents[rootQ] = rootP;
+            sizes[rootP] += sizes[rootQ];
+        }
+    }
+
+    public boolean isConnected(int p, int q) {
+        return findRoot(p) == findRoot(q);
+    }
+}
+
+```
+
+### Path Compression
+
+![Z - assets/images/Pasted image 20240317101050.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240317101050.png)
+- When doing `isConnected(15, 10)`
+	- climb tree
+		- `15->11->5->1->0`
+		- `10->3`
+	- flatten the tree branches
+		- `15->0`
+```java
+public class WeightedQuickUnionWithPathCompression implements DisjointSets{
+    int parents[];
+    int sizes[];
+
+    public WeightedQuickUnionWithPathCompression(int N) {
+        parents = new int[N];
+        sizes = new int[N];
+        for (int i = 0; i < N; ++i) {
+            parents[i] = -1;
+            sizes[i] = 1;
+        }
+    }
+
+    public int findRoot(int p) {
+        /* Find the root */
+        if (parents[p] < 0)
+            return p;
+        
+        int root = findRoot(parents[p]);
+        parents[p] = root;
+
+        return root;
+    }
+
+    public void connect(int p, int q) {
+        int rootP = findRoot(p);
+        int rootQ = findRoot(q);
+
+        /* already connected */
+        if (rootP == rootQ) return;
+
+        if (sizes[rootP] < sizes[rootQ]) {
+            parents[rootP] = rootQ;
+            sizes[rootQ] += sizes[rootP];
+        } else {
+            parents[rootQ] = rootP;
+            sizes[rootP] += sizes[rootQ];
+        }
+    }
+
+    public boolean isConnected(int p, int q) {
+        return findRoot(p) == findRoot(q);
+    }
+
+    public static void main(String[] args) {
+        WeightedQuickUnionWithPathCompression union = new WeightedQuickUnionWithPathCompression(16);
+        union.connect(3, 10);
+        union.connect(0, 3);
+        union.connect(0, 4);
+        union.connect(8, 14);
+        union.connect(2, 8);
+        union.connect(2, 9);
+        union.connect(0, 2);
+        union.connect(11, 15);
+        union.connect(5, 11);
+        union.connect(5, 12);
+        union.connect(6, 13);
+        union.connect(1, 5);
+        union.connect(1, 6);
+        union.connect(1, 7);
+        union.connect(0, 1);
+    }
+}
+```
