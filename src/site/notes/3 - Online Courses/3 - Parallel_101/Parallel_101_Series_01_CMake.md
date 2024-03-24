@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/3-online-courses/3-parallel-101/parallel-101-series-01-c-make/","noteIcon":"","created":"2024-03-23T22:12:44.912+01:00","updated":"2024-03-24T10:33:50.174+01:00"}
+{"dg-publish":true,"permalink":"/3-online-courses/3-parallel-101/parallel-101-series-01-c-make/","noteIcon":"","created":"2024-03-23T22:12:44.912+01:00","updated":"2024-03-24T10:43:41.330+01:00"}
 ---
 
 ## CMake引入以及子模块
@@ -82,6 +82,8 @@ target_sources(myapp PUBLIC hello.cpp other.cpp)                    # 添加要�
 				- see: https://github.com/liquidhiter/learn_cmake_by_actions/blob/main/1_Examples/3rd_party_lib_module/main.cpp#L3
 				- see: https://github.com/fmtlib/fmt/blob/5d63e87d235b86341f8d87f79ed8eb9825f34c44/CMakeLists.txt#L309
 					- `#include <fmt/core.h>`
+- **可能存在菱形依赖问题**
+	- 应用依赖于A，B，而B又依赖于A
 
 ### 系统中预安装的第三方库
 - 使用方法
@@ -96,3 +98,5 @@ target_sources(myapp PUBLIC hello.cpp other.cpp)                    # 添加要�
 - example: [learn_cmake_by_actions/1_Examples/3rd_party_lib_system at main · liquidhiter/learn_cmake_by_actions (github.com)](https://github.com/liquidhiter/learn_cmake_by_actions/tree/main/1_Examples/3rd_party_lib_system)
 - 不同package之间的依赖关系
 	- package管理者负责进行配置，确保dependencies正确处理 ![Z - assets/images/Pasted image 20240324103349.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240324103349.png)
+- 没有菱形依赖问题
+	- CMake会先存缓存中搜索相应的package
