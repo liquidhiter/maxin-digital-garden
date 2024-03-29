@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-02-01T15:05:05.713+01:00"}
+{"dg-publish":true,"permalink":"/1-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-03-29T12:30:45.925+01:00"}
 ---
 
 
@@ -2064,3 +2064,58 @@ class Solution {
 	n1 - n2 = (a1 - a2) * k + (r1 - r2)
 	(n1 - n2) % k == 0 => r1 = r2 => n1 and n2 are congruence modulo for k
 	```
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|                  162                  |     Medium      |  [162. 寻找峰值 - 力扣（LeetCode）](https://leetcode.cn/problems/find-peak-element/)    |
+> my solution
+```java
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int len = nums.length;
+        if (len == 1) return 0;
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + ((right - left) >> 1);
+            int prev = mid - 1, next = mid + 1;
+            Boolean leftCmp, rightCmp;
+            if (prev == -1) leftCmp = true;
+            else leftCmp = nums[mid] > nums[prev];
+            if (next == len) rightCmp = true;
+            else rightCmp = nums[mid] > nums[next];
+            if (leftCmp && rightCmp) {
+                return mid;
+            } else if (leftCmp && !rightCmp) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+> 宫水三叶题解
+```java
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int len = nums.length;
+        int left = 0, right = len - 1;
+        while (left < right) {
+            int mid = left + right >> 1;
+            // nums[mid] < nums[mid + 1] can be met here
+            if (nums[mid] > nums[mid + 1]) right = mid;
+            else                           left = mid + 1;
+        }
+        return right;
+    }
+}
+```
+- 理解二分法的本质
+	- 二段性，而非有序性
+	- 例如二分搜索中缩小搜索空间
+- 不需要额外处理边界条件
+	- first and last element
+- 理解返回right index的正确性
+	- while循环的终止条件
