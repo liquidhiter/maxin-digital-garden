@@ -1,15 +1,10 @@
 ---
-{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-10/","noteIcon":"","created":"2024-03-19T21:08:46.154+01:00","updated":"2024-04-10T06:38:15.222+02:00"}
+{"dg-publish":true,"permalink":"/3-online-courses/0-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-10/","noteIcon":"","created":"2024-03-19T21:08:46.154+01:00","updated":"2024-04-10T06:44:20.441+02:00"}
 ---
 
 ## Slides
 <iframe src="https://docs.google.com/presentation/d/1rEHpAx8Xu2LnJBWsRPWy8blL20qb96Q5UhdZtQYFkBI/edit#slide=id.g8dd5cb732_01435" width="700" height="1000" ></iframe>
-## Topics: 
-- Binary Search Tree (BST)
-- Priority Queue
-- Heap
-- Advanced Tree
-
+## Topic: Binary Search Tree (BST)
 ### Introduction
 - array based map
 ### BST
@@ -826,8 +821,8 @@ public class BST<Key extends Comparable<Key>, Value> {
 }
 ```
 
-### Priority Queue
-#### typical interface
+## Topic: Priority Queue
+### typical interface
 ```java
 /** (Min) Priority Queue: Allowing tracking and removal of the
   * smallest item in a priority queue. */
@@ -845,7 +840,7 @@ public interface MinPQ<Item> {
 - application
     - keep track of the `smallest`, `largest` or `best`, etc
 
-#### example: find the M most unharmonious messsages
+### example: find the M most unharmonious messsages
 ```java
 public List<String> unharmoniousTexts(Sniffer sniffer, int M) {
     	Comparator<String> cmptr = new HarmoniousnessComparator();
@@ -872,19 +867,17 @@ public List<String> unharmoniousTexts(Sniffer sniffer, int M) {
 | getSmallest | Θ(1) | Θ(log N) | Θ(N) | Θ(1) |
 | removeSmallest | Θ(N) | Θ(log N) | Θ(N) | Θ(log N) |
 
-### Heap
-#### binary min-heap
+## Topic: Heap
+### binary min-heap
 - definition
     - binary tree that is complete, and obeys min-heap property
 - min-heap
     - every node is less than or equal to both of its children
 - complete
     - missing items only at the bottom level if any, all nodes are as far left as possible
-
-![binary min-heap](./../asset/binary_min_heap.png "Binary Min-Heap")
-
-#### array based implementation
-![array based binary min-heap](./../asset/array_based_min_heap.png "Binary Min-Heap")
+![Z - assets/images/Pasted image 20240410064257.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240410064257.png)
+### array based implementation
+![Z - assets/images/Pasted image 20240410064319.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240410064319.png)
 - advantages
     - easy to implement (compared with tress)
     - memory efficient (compared with trees)
@@ -1460,8 +1453,8 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 }
 ```
 
-### Advanced Trees
-#### traversals
+## Topic: Advanced Trees
+### traversals
 - depth first traversals
     - preorder
     - inorder
@@ -1514,12 +1507,9 @@ public void PostOrder(BSTNode x) {
   - OOP concept
   - `software entities should be open for extension, but closed for modification`
   - reference: https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle
-
-#### visitor pattern
-
+### visitor pattern
 - *A **visitor pattern** is a [software design pattern](https://en.wikipedia.org/wiki/Software_design_pattern) that separates the [algorithm](https://en.wikipedia.org/wiki/Algorithm) from the [object](https://en.wikipedia.org/wiki/Object_(computer_science)) structure. Because of this separation new operations can be added to existing object structures without modifying the structures.*
 - reference:
-
 ```java
 void preorderTraverse(Tree<Label> T, Action<Label> vistor) {
    if (T == null) { return; }
@@ -1546,9 +1536,7 @@ class FindPig implements Action<String> {
 
 preorderTraverse(tree, new FindPig());
 ```
-
 ### level order traversal
-
 ```java
 void levelorderTraverse(BSTNode x) {
     for (int i = 0; i < x.height; i++) {
@@ -1566,9 +1554,7 @@ void visitLevel(BSTNode x, int level) {
     }
 }
 ```
-
-#### tree height
-
+### tree height
 - difference between bushy and spindly trees
 ```Python
 ``````Python
@@ -1576,9 +1562,7 @@ void visitLevel(BSTNode x, int level) {
 ``````Python
 ```
 ## range finding
-
 #### geometric search
-
 ```java
 public Set<Label> findInRange(Tree T, Label min, Label max) {
     Set<Label> results = new Set<>();
@@ -1599,12 +1583,11 @@ private void rangeFindHelper(Tree T, Label min, Label max, Set<Label> s) {
     }
 }
 ```
-
 #### prune tree
 	![Z - assets/images/Pasted image 20240410063643.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240410063643.png)
-#### spatial trees
+### spatial trees
 ![Z - assets/images/Pasted image 20240410063711.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240410063711.png)
-#### iterator
+### iterator
 
 ```java
 private class preorderIterator implements Iterator<Label> {
@@ -1625,4 +1608,3 @@ private class preorderIterator implements Iterator<Label> {
     }
 }
 ```
-
