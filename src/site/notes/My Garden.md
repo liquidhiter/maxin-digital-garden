@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/my-garden/","tags":["gardenEntry"],"noteIcon":"","created":"2024-01-26T07:00:51.036+01:00","updated":"2024-05-12T11:16:24.569+02:00"}
+{"dg-publish":true,"permalink":"/my-garden/","tags":["gardenEntry"],"noteIcon":"","created":"2024-01-26T07:00:51.036+01:00","updated":"2024-05-12T11:24:50.281+02:00"}
 ---
 
 ![more_is_different.png](/img/user/Z%20-%20assets/images/more_is_different.png)
