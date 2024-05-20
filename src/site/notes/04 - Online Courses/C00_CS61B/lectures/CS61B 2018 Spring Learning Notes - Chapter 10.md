@@ -1,9 +1,10 @@
 ---
-{"dg-publish":true,"permalink":"/04-online-courses/c00-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-10/","noteIcon":"","created":"2024-03-19T21:08:46.154+01:00","updated":"2024-05-20T11:11:09.929+02:00"}
+{"dg-publish":true,"permalink":"/04-online-courses/c00-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-10/","noteIcon":"","created":"2024-03-19T21:08:46.154+01:00","updated":"2024-05-20T11:14:29.898+02:00"}
 ---
 
 ## Slides
-<iframe src="https://docs.google.com/presentation/d/1rEHpAx8Xu2LnJBWsRPWy8blL20qb96Q5UhdZtQYFkBI/edit#slide=id.g8dd5cb732_01435" width="700" height="1000" ></iframe>
+<iframe src="https://docs.google.com/presentation/d/1rEHpAx8Xu2LnJBWsRPWy8blL20qb96Q5UhdZtQYFkBI/edit#slide=id.g8dd5cb732_01435" width="700" height="1000" > </iframe>
+
 ## Topic: Binary Search Tree (BST)
 ### Introduction
 - array based map
