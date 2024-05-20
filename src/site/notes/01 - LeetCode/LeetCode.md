@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-03-29T12:30:45.925+01:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-20T22:29:37.629+02:00"}
 ---
 
 
@@ -2119,3 +2119,72 @@ class Solution {
 	- first and last element
 - 理解返回right index的正确性
 	- while循环的终止条件
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|          1109                          |    Medium       |     https://leetcode.cn/problems/corporate-flight-bookings/     |
+#differential-array
+- time complexity: `O(N)`
+```java
+class Solution {
+    public int[] corpFlightBookings(int[][] bookings, int n) {
+        int res[] = new int[n];
+        /* Differential array */
+        int len = bookings.length;
+        for (int i = 0; i < len; ++i) {
+            int start = bookings[i][0] - 1, end = bookings[i][1] - 1, val = bookings[i][2];
+            res[start] += val;
+            if (end + 1 < n) {
+                res[end + 1] -= val;
+            }
+        }
+        /* Restore the original values */
+        for (int j = 1; j < n; ++j) {
+            res[j] += res[j - 1];
+        }
+
+        return res;
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|                1094                    |     Medium      |    https://leetcode.cn/problems/car-pooling/      |
+#differential-array 
+- time complexity: `O(N)`
+```java
+class Solution {
+    public boolean carPooling(int[][] trips, int capacity) {
+        /* Number of seats accumulatively occupied */
+        int caps[] = new int[1001];
+        /* Differential array: O(1) */
+        int len = trips.length;
+        int toMax = 0;
+        for (int i = 0; i < len; ++i) {
+            int num = trips[i][0], from = trips[i][1], to = trips[i][2];
+            caps[from] += num;
+            /* Passengers get off the car at the destination to */
+            caps[to] -= num;
+            /* To avoid iterate all the 1001 elements: there might be much fewer than that */
+            if (to > toMax) {
+                toMax = to;
+            }
+        }
+        /* Restore the original number of seats occupied accumulatively */
+        /* Dont forget to check the first drop-off */
+        if (caps[0] > capacity) {
+            return false;
+        }
+        for (int j = 1; j <= toMax; ++j) {
+            caps[j] += caps[j - 1];
+            if (caps[j] > capacity) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
