@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-20T22:29:37.629+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-20T22:32:11.992+02:00"}
 ---
 
 
@@ -2124,6 +2124,7 @@ class Solution {
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |          1109                          |    Medium       |     https://leetcode.cn/problems/corporate-flight-bookings/     |
+
 #differential-array
 - time complexity: `O(N)`
 ```java
@@ -2153,6 +2154,7 @@ class Solution {
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                1094                    |     Medium      |    https://leetcode.cn/problems/car-pooling/      |
+
 #differential-array 
 - time complexity: `O(N)`
 ```java
