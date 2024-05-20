@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/04-online-courses/c00-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-10/","noteIcon":"","created":"2024-03-19T21:08:46.154+01:00","updated":"2024-04-10T06:44:20.441+02:00"}
+{"dg-publish":true,"permalink":"/04-online-courses/c00-cs-61-b/lectures/cs-61-b-2018-spring-learning-notes-chapter-10/","noteIcon":"","created":"2024-03-19T21:08:46.154+01:00","updated":"2024-05-20T11:11:09.929+02:00"}
 ---
 
 ## Slides
@@ -38,7 +38,6 @@ p ≺ q and q ≺ r imply p ≺ r.
 		- hibbard deletion
 ![Z - assets/images/Pasted image 20240319213553.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240319213553.png)
 - either the predecessor or successor
-	- <font color="red">must follow the BST properties (left < root < right)</font>
 		- predecessor: **largest in the left sub-tree**
 			- between the `bag` and `dog`
 		- successor: **smallest in the right sub-tree**
