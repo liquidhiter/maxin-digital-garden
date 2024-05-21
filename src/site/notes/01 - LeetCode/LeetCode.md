@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:07:34.781+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:08:28.149+02:00"}
 ---
 
 
@@ -2255,6 +2255,34 @@ class Solution {
         right = right < 0 ? left : right;
 
         return new int[] {left, right};
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|              704                      |     Medium      |    https://leetcode.cn/problems/binary-search/      |
+
+#binary-search 
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+        /* [left, right) */
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid;
+            }
+        }
+
+        return -1;
     }
 }
 ```
