@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-20T22:32:11.992+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:07:34.781+02:00"}
 ---
 
 
@@ -2187,6 +2187,74 @@ class Solution {
             }
         }
         return true;
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|             34                       |    Medium      |    https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/      |
+#binary-search
+```java
+class Solution {
+
+    private int leftBound(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+        /* [left, right) */
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                right = mid;
+            } else if (nums[mid] > target) {
+                right = mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            }
+        }
+
+        if (left < 0 || left >= nums.length) {
+            return -1;
+        }
+
+        return nums[left] == target ? left : -1;
+    }
+
+    private int rightBound(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+        /* [left, right) */
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                left = mid + 1;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid;
+            }
+        }
+
+        if (left - 1 < 0 || left - 1 >= nums.length) {
+            return -1;
+        }
+
+        return nums[left - 1] == target ? left - 1 : -1;
+    }
+
+    public int[] searchRange(int[] nums, int target) {
+        int left = leftBound(nums, target);
+        int right = rightBound(nums, target);
+
+        if (left < 0 && right < 0) {
+            return new int[] {-1, -1};
+        } 
+        
+        left = left < 0 ? right : left;
+        right = right < 0 ? left : right;
+
+        return new int[] {left, right};
     }
 }
 ```
