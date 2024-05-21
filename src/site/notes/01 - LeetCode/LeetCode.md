@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:09:34.329+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:19:32.692+02:00"}
 ---
 
 
@@ -2284,6 +2284,73 @@ class Solution {
         }
 
         return -1;
+    }
+}
+```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|             LCR172                       |      Medium     |    https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/      |
+
+#binary-search 
+```java
+class Solution {
+    public int countTarget(int[] scores, int target) {
+        int left = leftBound(scores, target);
+        int right = rightBound(scores, target);
+
+        if (left < 0 && right < 0) {
+            return 0;
+        } else if (left < 0 || right < 0) {
+            return 1;
+        } else {
+            return right - left + 1;
+        }
+    }
+
+    private int leftBound(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+        /* [left, right) */
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                right = mid;
+            } else if (nums[mid] > target) {
+                right = mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            }
+        }
+
+        if (left < 0 || left >= nums.length) {
+            return -1;
+        }
+
+        return nums[left] == target ? left : -1;
+    }
+
+    private int rightBound(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+        /* [left, right) */
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                left = mid + 1;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid;
+            }
+        }
+
+        if (left - 1 < 0 || left - 1 >= nums.length) {
+            return -1;
+        }
+
+        return nums[left - 1] == target ? left - 1 : -1;
     }
 }
 ```
