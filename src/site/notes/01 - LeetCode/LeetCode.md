@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:08:57.131+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:09:34.329+02:00"}
 ---
 
 
@@ -2263,7 +2263,7 @@ class Solution {
 ---
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
-|              704                      |     Medium      |    https://leetcode.cn/problems/binary-search/      |
+|              704                      |     Easy      |    https://leetcode.cn/problems/binary-search/      |
 
 #binary-search 
 ```java
