@@ -1,11 +1,11 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-21T21:19:32.692+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-23T21:05:14.156+02:00"}
 ---
 
 
-| Leetcode Question | Level | Link |
-| :---------------: | :------: | :----: |
-| 28 |   Easy   | https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/?company_slug=bytedance |
+| Leetcode Question | Level |                                                        Link                                                         |
+| :---------------: | :---: | :-----------------------------------------------------------------------------------------------------------------: |
+|        28         | Easy  | https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/?company_slug=bytedance |
 
 ```markdown
 Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
@@ -2354,3 +2354,43 @@ class Solution {
     }
 }
 ```
+
+---
+| Leetcode Question | Level | Link |
+| :-------------------: | :----: | :----:|
+|                 875                   |    Medium       |    https://leetcode.cn/problems/koko-eating-bananas/      |
+
+#binary-search 
+```java
+class Solution {
+    private long helper(int[] piles, int s) {
+        long hours = 0;
+        for (int i = 0; i < piles.length; ++i) {
+            hours += piles[i] / s;
+            if (piles[i] % s > 0) {
+                hours++;
+            }
+        }
+        return hours;
+    }
+
+    public int minEatingSpeed(int[] piles, int h) {
+        int left = 1;
+        int right = 1000000000 + 1;
+        /* [left, right) */
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (helper(piles, mid) <= h) {
+                /* Reduce the speed */
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+```
+- NOTE:
+	- `right = mid`
+		- lower the speed to find the time closer to the maximum allowed
