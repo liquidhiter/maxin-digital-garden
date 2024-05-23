@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-23T21:25:05.474+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-23T21:28:25.130+02:00"}
 ---
 
 ## problem 28
@@ -38,8 +38,9 @@ int strStr(char* haystack, char* needle) {
 }
 ```
 
-## problem 21
 ---
+## problem 21
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 21 |   Easy   | https://leetcode.cn/problems/merge-two-sorted-lists/description/ |
@@ -100,8 +101,9 @@ struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2) {
 }
 ```
 
-## problem 88
 ---
+## problem 88
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 88 |   Easy   | https://leetcode.cn/problems/merge-sorted-array/description/ |
@@ -185,8 +187,9 @@ void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n) {
 }
 ```
 
-## problem 977
 ---
+## problem 977
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 977 |   Easy   | https://leetcode.cn/problems/squares-of-a-sorted-array/description/ |
@@ -255,8 +258,9 @@ int* sortedSquares(int* nums, int numsSize, int* returnSize) {
 }
 ```
 
-## problem 83
 ---
+## problem 83
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 83 |   Easy   | https://leetcode.cn/problems/remove-duplicates-from-sorted-list/description/ |
@@ -341,8 +345,9 @@ struct ListNode* deleteDuplicates(struct ListNode* head) {
 }
 ```
 
-## problem 141
 ---
+## problem 141
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 141 |   Easy   | https://leetcode.cn/problems/linked-list-cycle/description/ |
@@ -403,8 +408,9 @@ bool hasCycle(struct ListNode *head) {
 - fast pointer is `1` node faster than slow pointer because this is the only way that two pointers can reach the same node
 
 
-## problem 160
 ---
+## problem 160
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 160 |   Easy   | https://leetcode.cn/problems/intersection-of-two-linked-lists/description/ |
@@ -532,8 +538,9 @@ public class Solution {
         - iterates m + n + c0 nodes, where c0 is the nodes before the intersection node
 
 
-## problem 203
 ---
+## problem 203
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 203 |   Easy   | https://leetcode.cn/problems/remove-linked-list-elements/description/ |
@@ -647,8 +654,9 @@ struct ListNode* removeElements(struct ListNode* head, int val) {
 ```
 > **trick: add additional sentinel node pointing to the head to include head in the check**
 
-## problem 206
 ---
+## problem 206
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 206 |   Easy   | https://leetcode.cn/problems/reverse-linked-list/ |
@@ -733,8 +741,9 @@ struct ListNode* reverseList(struct ListNode* head) {
     - this reverse the `two adjacent nodes`
 
 
-## problem 234
 ---
+## problem 234
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 234 |   Easy   | https://leetcode.cn/problems/palindrome-linked-list/description/ |
@@ -906,8 +915,9 @@ bool isPalindrome(struct ListNode* head) {
 }
 ```
 
-## problem 876
 ---
+## problem 876
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 876 |   Easy   | https://leetcode.cn/problems/middle-of-the-linked-list/description/ |
@@ -959,8 +969,9 @@ struct ListNode* middleNode(struct ListNode* head) {
 - `fast` and `slow` pointers solution, `fast` moves by two nodes while `slow` moves by one node
 
 
-## problem 1290
 ---
+## problem 1290
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 1290 |   Easy   | https://leetcode.cn/problems/convert-binary-number-in-a-linked-list-to-integer/|
@@ -1014,8 +1025,9 @@ int getDecimalValue(struct ListNode* head) {
     - shouldn't bit or operation be much more efficient?
     - [TODO] check the diassambly code ...
 
-## problem 2
 ---
+## problem 2
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 2 |   Medium   | https://leetcode.cn/problems/add-two-numbers/description/ |
@@ -1288,8 +1300,9 @@ struct ListNode* rotateRight(struct ListNode* head, int k) {
 }
 ```
 
-## problem 496
 ---
+## problem 496
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 496 |   Easy   | https://leetcode.cn/problems/next-greater-element-i/ |
@@ -1367,8 +1380,9 @@ class Solution {
 }
 ```
 
-## problem 739
 ---
+## problem 739
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 739 |   Medium   | https://leetcode.cn/problems/daily-temperatures/ |
@@ -1393,8 +1407,9 @@ class Solution {
 }
 ```
 
-## problem 503
 ---
+## problem 503
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 503 |   Medium   | https://leetcode.cn/problems/next-greater-element-ii/description/ |
@@ -1523,8 +1538,9 @@ class Solution {
 }
 ```
 
-## problem 23
 ---
+## problem 23
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 23 |   Hard   | https://leetcode.cn/problems/merge-k-sorted-lists/ |
@@ -1622,8 +1638,9 @@ class Solution {
 }
 ```
 
-## problem 26
 ---
+## problem 26
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 26 |   Easy   | https://leetcode.cn/problems/remove-duplicates-from-sorted-array/ |
@@ -1646,8 +1663,9 @@ class Solution {
 }
 ```
 
-## problem 27
 ---
+## problem 27
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 27 |   Easy   | https://leetcode.cn/problems/remove-element/description/ |
@@ -1668,8 +1686,9 @@ class Solution {
 }
 ```
 
-## problem 283
 ---
+## problem 283
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 283 |   Easy   | https://leetcode.cn/problems/move-zeroes/description/ |
@@ -1713,8 +1732,9 @@ class Solution {
 }
 ```
 
-## problem 167
 ---
+## problem 167
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 167 |   Medium   | https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/description/ |
@@ -1772,8 +1792,9 @@ class Solution {
     - reduce the searching space
     - sorted array hints the usage of `binary search`
 
-## problem 344
 ---
+## problem 344
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 344 |   Easy   | https://leetcode.cn/problems/reverse-string/ |
@@ -1791,8 +1812,9 @@ class Solution {
 }
 ```
 
-## problem 5
 ---
+## problem 5
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 5 |   Medium   | https://leetcode.cn/problems/longest-palindromic-substring/description/ |
@@ -1824,8 +1846,9 @@ class Solution {
 }
 ```
 
-## problem 303
 ---
+## problem 303
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 303 |   Easy   | https://leetcode.cn/problems/range-sum-query-immutable/description/ |
@@ -1868,8 +1891,9 @@ class NumArray {
 - `a[i] + a[i+1] + ... + a[j] = sum[j] - sum[i]` 
 	- `right + 1` because the `0th` element in `preNums` is `0` which is needed for `i = 0`
 
-## problem 304
 ---
+## problem 304
+
 | Leetcode Question | Level | Link |
 | :---------------: | :------: | :----: |
 | 304 |   Medium   | https://leetcode.cn/problems/range-sum-query-2d-immutable/ |
@@ -1921,8 +1945,9 @@ class NumMatrix {
 }
 ```
 
-## problem 1314
 ---
+## problem 1314
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |             1314                       |     Medium      |    https://leetcode.cn/problems/matrix-block-sum/description/      |
@@ -1956,8 +1981,9 @@ class Solution {
 }
 ```
 
-## problem 724
 ---
+## problem 724
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                   724                 |      Easy     |     https://leetcode.cn/problems/find-pivot-index/description/     |
@@ -1985,8 +2011,9 @@ class Solution {
 }
 ```
 
-## problem 238
 ---
+## problem 238
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                238                    |     Medium      |     https://leetcode.cn/problems/product-of-array-except-self/description/     |
@@ -2013,8 +2040,9 @@ class Solution {
 }
 ```
 
-## problem 525
 ---
+## problem 525
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |               525                     |     Medium       |     https://labuladong.gitee.io/algo/ds-class/shu-zu-lia-39fd9/qiang-hua--a9442/#_525-%E8%BF%9E%E7%BB%AD%E6%95%B0%E7%BB%84     |
@@ -2045,8 +2073,9 @@ class Solution {
 }
 ```
 
-## problem 523
 ---
+## problem 523
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                  523                  |     Medium      |     https://leetcode.cn/problems/continuous-subarray-sum/solutions/1/gong-shui-san-xie-tuo-zhan-wei-qiu-fang-1juse/     |
@@ -2094,8 +2123,9 @@ class Solution {
 	(n1 - n2) % k == 0 => r1 = r2 => n1 and n2 are congruence modulo for k
 	```
 
-## problem 162
 ---
+## problem 162
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                  162                  |     Medium      |  [162. 寻找峰值 - 力扣（LeetCode）](https://leetcode.cn/problems/find-peak-element/)    |
@@ -2151,8 +2181,9 @@ class Solution {
 - 理解返回right index的正确性
 	- while循环的终止条件
 
-## problem 1109
 ---
+## problem 1109
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |          1109                          |    Medium       |     https://leetcode.cn/problems/corporate-flight-bookings/     |
@@ -2182,8 +2213,9 @@ class Solution {
 }
 ```
 
-## problem 1094
 ---
+## problem 1094
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                1094                    |     Medium      |    https://leetcode.cn/problems/car-pooling/      |
@@ -2224,8 +2256,9 @@ class Solution {
 }
 ```
 
-## problem 34
 ---
+## problem 34
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |             34                       |    Medium      |    https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/      |
@@ -2294,8 +2327,9 @@ class Solution {
 }
 ```
 
-## problem 704
 ---
+## problem 704
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |              704                      |     Easy      |    https://leetcode.cn/problems/binary-search/      |
@@ -2323,8 +2357,9 @@ class Solution {
 }
 ```
 
-## problem LCR172
 ---
+## problem LCR172
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |             LCR172                       |      Medium     |    https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/      |
@@ -2391,8 +2426,9 @@ class Solution {
 }
 ```
 
-## problem 875
 ---
+## problem 875
+
 | Leetcode Question | Level | Link |
 | :-------------------: | :----: | :----:|
 |                 875                   |    Medium       |    https://leetcode.cn/problems/koko-eating-bananas/      |
