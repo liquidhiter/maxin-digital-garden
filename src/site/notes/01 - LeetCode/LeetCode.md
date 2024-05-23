@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-23T21:05:14.156+02:00"}
+{"dg-publish":true,"permalink":"/01-leet-code/leet-code/","noteIcon":"","created":"2024-01-27T08:08:41.943+01:00","updated":"2024-05-23T21:19:03.573+02:00"}
 ---
 
 
@@ -2394,3 +2394,8 @@ class Solution {
 - NOTE:
 	- `right = mid`
 		- lower the speed to find the time closer to the maximum allowed
+	- binary search
+		- quickly shrink the search space by halving
+			- IDEALLY the search needs to start from a smaller speed
+				- but this takes `O(N)` time
+			- start from a bigger speed doesn't result in high-order time complexity
