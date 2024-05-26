@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-26T10:45:42.607+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-26T11:09:26.963+02:00"}
 ---
 
 ## Term and description
@@ -204,3 +204,21 @@ out1:
 				 Birth: 2024-05-26 09:28:32.993885165 +0200
 			```
 		- [ ] how the file name is associated with the inode index ?
+- 打开文件的过程
+	- `open`函数打开文件的时候，内核会申请一段内存，并且将静态文件的数据内容从硬盘中读取到内存中进行管理和缓存
+		- 内存中的文件数据拷贝称为动态文件或者内核缓冲区
+	- 文件打开后对于这个文件的读写操作都是针对内存中这一份*动态文件*进行操作
+	- 内核会将内存中的动态文件更新同步到硬盘设备中
+	- 设计原则
+		- 存储设备多是基于Flash块设备
+			- 读写限制：必须是以块位最小存取单位
+		- 内存可以按字节为单位来进行操作
+			- 文件缓存在内存使得操作更灵活
+		- 内存的读写速率更快
+- 进程控制块（Process Control Block，PCB）
+![Z - assets/images/Pasted image 20240526110816.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240526110816.png)
+	- 文件描述符表
+	- 文件表
+		- 偏移量
+		- 对应的i-node
+		- ...
