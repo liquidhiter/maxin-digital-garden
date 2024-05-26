@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/08-tech-articles-to-read/to-read/","noteIcon":"","created":"2024-01-27T18:27:30.027+01:00","updated":"2024-05-26T08:59:48.897+02:00"}
+{"dg-publish":true,"permalink":"/08-tech-articles-to-read/to-read/","noteIcon":"","created":"2024-01-27T18:27:30.027+01:00","updated":"2024-05-26T09:05:06.655+02:00"}
 ---
 
 
@@ -7,3 +7,4 @@
 - [binary search bug] https://blog.research.google/2006/06/extra-extra-read-all-about-it-nearly.html
 - [Git branches best practice] https://nvie.com/posts/a-successful-git-branching-model/
 - [Monolithic Kernel] https://wiki.osdev.org/Monolithic_Kernel
+- [Tanenbaum–Torvalds Debate] https://en.wikipedia.org/wiki/Tanenbaum%E2%80%93Torvalds_debate
