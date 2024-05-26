@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-25T22:07:44.776+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-25T23:08:28.042+02:00"}
 ---
 
 ## Term and description
@@ -157,3 +157,16 @@ out1:
 - `mode`
 	- file access modes
 	- ONLY when the flags contains `O_CREAT` or `O_TMP_FILE`
+	- `mode_t`: `uint32_t`
+		- `[0 : 2]`: other users
+		- `[3 : 5]`: group
+		- `[6 : 8]`: owner
+		- `[9 : 11]`: super
+	- use pre-defined macros, such as `S_IRUSR`
+- offset
+	- at which position the `read` or `write` starts
+	- `0` by default
+- `close`
+	- close an opened file
+	- *kernel automatically closes the opening files when a process is being terminated*
+	- good practice of explicitly `close` an opened file though
