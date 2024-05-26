@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-25T23:08:28.042+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-26T10:45:42.607+02:00"}
 ---
 
 ## Term and description
@@ -170,3 +170,37 @@ out1:
 	- close an opened file
 	- *kernel automatically closes the opening files when a process is being terminated*
 	- good practice of explicitly `close` an opened file though
+- Linux 文件
+	- 硬盘的最小存储单位是*扇区(sector)*
+		- 每个扇区存储512字节
+	- 文件的最小存取单位是*块(block)*
+		- 通常*1*个block由*8*个sector组成
+	- inode
+		- meta-data of a file
+		- 硬盘包含数据区和inode区
+			- inode table中存放每一个文件对应的inode
+				- 结构体，用来记录文件的多重信息
+					- NOTE：文件名不包含在这一结构体中
+				- 每一个inode对应唯一的数字index
+		- example
+			```bash
+				╭─    ~/Git/Linux-ES  on   main                                                                                                                                                                                                                                                                                                                           ✔    at 10:34:23 AM 
+				╰─ ls -li
+				total 20
+				254463 -rw-r--r-- 1 maxin maxin  262 May 26 09:24 CMakeLists.txt
+				  4803 drwxr-xr-x 2 maxin maxin 4096 May 26 10:06 IO
+				254467 -rw-r--r-- 1 maxin maxin  233 May 26 09:47 README.md
+				  4800 drwxr-xr-x 4 maxin maxin 4096 May 26 10:11 build
+				254603 -rwxr-xr-x 1 maxin maxin  323 May 26 09:43 build.sh
+				╭─    ~/Git/Linux-ES  on   main                                                                                                                                                                                                                                                                                                                           ✔    at 10:34:29 AM 
+				╰─ stat build.sh
+				  File: build.sh
+				  Size: 323             Blocks: 8          IO Block: 4096   regular file
+				Device: 820h/2080d      Inode: 254603      Links: 1
+				Access: (0755/-rwxr-xr-x)  Uid: ( 1000/   maxin)   Gid: ( 1000/   maxin)
+				Access: 2024-05-26 09:43:13.436456632 +0200
+				Modify: 2024-05-26 09:43:13.426456541 +0200
+				Change: 2024-05-26 09:43:13.426456541 +0200
+				 Birth: 2024-05-26 09:28:32.993885165 +0200
+			```
+		- [ ] how the file name is associated with the inode index ?
