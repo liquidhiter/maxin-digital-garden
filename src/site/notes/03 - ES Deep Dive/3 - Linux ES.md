@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-26T11:09:26.963+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-26T15:52:13.668+02:00"}
 ---
 
 ## Term and description
@@ -222,3 +222,43 @@ out1:
 		- 偏移量
 		- 对应的i-node
 		- ...
+- `errno`
+	- Linux系统下对常见的错误都做了一个特殊的编号
+	- 每一个进程都维护了自己的`errno`变量，是程序中的全局变量（当前进程/程序），用于存储就近发生的函数执行时发生的错误编号
+		- 查看对应的函数的手册来确定`errno`是否被使用
+	- example
+		```c
+		#include <stdio.h>
+		#include <errno.h>
+		```
+- `strerror`
+	- "string.h"
+- `perror`
+	- "stdio.h"
+- 终止进程(might be wrong)
+	- `_exit()` and `_Exit()`
+		- system call
+		- `return`执行后把控制权交给调用函数（caller），结束该进程
+		- 调用`_exit()`函数会清楚其使用的内存空间，并*销毁其在内核中的各种数据结构，关闭进程的所有文件描述符，并结束进程，将控制权交给操作系统*
+	- `exit()` 
+		- 终止进程
+		- function from C standard library
+		- 调用`exit()` 会执行一些housecleaning，最后调用`_exit()`函数
+- 空洞文件
+	- `lseek`偏移量超过编辑的文件的实际大小
+	- 空洞文件产生时不会占用任何物理空间，直到某个时刻对空洞文件部分进行写入数据时才会为其分配对应的空间
+		- [ ] 逻辑上该文件的大小是包含了空洞部分大小的？
+	- 应用场景
+		- 多线程共同操作同一个文件
+	- example
+		```bash
+		ls -lsh ./hole_file.txt
+		4.0K -rwxr--r-- 1 maxin maxin 8.0K May 26 15:23 ./hole_file.txt
+		```
+	- `ls`: returns the logic size of the file
+		- `8.0K`
+	- `du`: returns the actual size of the file
+		- `4.0K`
+	- read back from the hole file
+		- `0x00`
+		- `4.0K -rw-r--r--  1 maxin maxin 4.0K May 26 15:51 hole_bytes.txt`
