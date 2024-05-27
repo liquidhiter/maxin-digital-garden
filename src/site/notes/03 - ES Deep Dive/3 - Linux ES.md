@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-26T15:52:13.668+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-27T22:10:07.170+02:00"}
 ---
 
 ## Term and description
@@ -262,3 +262,51 @@ out1:
 	- read back from the hole file
 		- `0x00`
 		- `4.0K -rw-r--r--  1 maxin maxin 4.0K May 26 15:51 hole_bytes.txt`
+
+### NAT
+- Network Address Translation
+	- 网络地址转换
+- 使用NAT网卡时，Ubuntu访问外网是委托Windows发出数据包
+- Windows接受到回应后再转发给Ubuntu
+- [ ] 建议使用 NAT 网卡 IP，因为使用桥接网卡的话必须启动开发板 ?
+- [ ] 桥接网卡 ？
+
+
+### `/etc/network/interfaces`
+- reference: [Understanding and Configuring Linux Network Interfaces | Baeldung on Linux](https://www.baeldung.com/linux/network-interface-configure)
+- explanation
+```markdown
+What Is the /etc/network/interfaces File?
+To clarify,  /etc/network/interfaces file is a way to configure network interfaces. It’s mostly used by Linux Debian-like distributions.
+The majority of the network setup can be done via this file. We can give an IP address to a network interface either statically or dynamically. Further, we can set up routing information, a DNS server, etc.
+Moreover, when we use the network interface management commands, they bring up and down the interfaces and configure them based on the /etc/network/interfaces file: the ifup command brings the network interface up, while the ifdown command takes it down.
+```
+> configuration file, setup the network between the host and the network
+
+
+### 网络配置分析
+- USB网卡
+	- 手动分配windows中IP地址：`192.168.5.10`
+	- 用作桥接网卡
+		- 开发板连接网络
+	- 手动分配ubuntu中IP地址：`192.168.5.11`
+- 开发板地址
+	- 手动分配：`192.168.5.9`
+- 在windows中防火墙将开发板的IP地址添加到白名单
+	- reference: [windows系列---【如何给window系统添加ip白名单？】 - 少年攻城狮 - 博客园 (cnblogs.com)](https://www.cnblogs.com/hujunwei/p/14613497.html)
+- NFS协议
+	- 开发板挂载ubuntu的目录
+
+### Linux内核编译流程
+#### 编译内核
+- `make mrproper`
+- `make 100ask_imx6ull_defconfig`
+- `make zImage -j8`
+- `make dtbs`
+#### 编译内核模块
+- `make modules`
+
+### 待了解
+- [ ] zImage内核文件
+- [ ] 设备树的二进制文件
+- [ ] 编译Linux驱动需要先编译内核
