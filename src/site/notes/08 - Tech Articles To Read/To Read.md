@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/08-tech-articles-to-read/to-read/","noteIcon":"","created":"2024-01-27T18:27:30.027+01:00","updated":"2024-05-26T09:05:06.655+02:00"}
+{"dg-publish":true,"permalink":"/08-tech-articles-to-read/to-read/","noteIcon":"","created":"2024-01-27T18:27:30.027+01:00","updated":"2024-05-28T21:48:34.776+02:00"}
 ---
 
 
@@ -8,3 +8,4 @@
 - [Git branches best practice] https://nvie.com/posts/a-successful-git-branching-model/
 - [Monolithic Kernel] https://wiki.osdev.org/Monolithic_Kernel
 - [Tanenbaum–Torvalds Debate] https://en.wikipedia.org/wiki/Tanenbaum%E2%80%93Torvalds_debate
+- [How the systemd dev was banned: just for fun] https://lkml.org/lkml/2014/4/2/420
