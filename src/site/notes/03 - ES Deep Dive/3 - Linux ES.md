@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-27T22:10:07.170+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-28T21:49:49.222+02:00"}
 ---
 
 ## Term and description
@@ -306,7 +306,51 @@ Moreover, when we use the network interface management commands, they bring up a
 #### 编译内核模块
 - `make modules`
 
+### `kernal object (.ko)`
+- 内核模块文件
+	- 按需插入和卸载的驱动模块文件
+- merits
+	- 减小内核size
+	- 按需使用，方便
+- 加载驱动模块的方法
+	- method 1
+		- `insmod xxx.ko`
+	- method 2
+		- 移动`xxx.ko`文件到`/lib/module/#uname-r#/`目录下
+		- `depmod`生成模块之间的依赖关系
+			- `modprobe xxx`
+	- 区别
+		- `modprobe`可以通过检查`.dep`文件来解决模块之间的依赖关系
+- reference
+	- https://blog.csdn.net/qq_38880380/article/details/79227760
+
+### bootloader, 内核和文件系统
+- WHAT?
+- `init` 服务进程
+	- 守护进程，进程号为1
+		- [ ] 什么是守护进程？ 
+	- Linux系统在引导时加载内核后，便由内核加载init程序
+	- init程序完成剩下的引导过程
+- `system V` 守护进程
+	- 运行级别
+		- 决定了服务的启动顺序
+			- 优先级
+		- 服务之间可能相互依赖
+			- 例如NFS客户端只能在网络服务启动后才能正常启动
+	- 初始化脚本都存储在 `/etc/rc.d/init.d` 或者 `/etc/init.d`中
+- `systemd`
+	- `d`通常作为系统守护进程的后缀标志
+	- 中央化系统及设置管理程序，包括守护进程，程序库以及应用软件
+	- 优化了并行启动，简化了系统服务之间的依赖关系
+	- 违背了Linux中一个程序只做一件事的哲学？
+![Z - assets/images/Pasted image 20240528214034.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240528214034.png)
+
+
+
 ### 待了解
 - [ ] zImage内核文件
 - [ ] 设备树的二进制文件
 - [ ] 编译Linux驱动需要先编译内核
+- [ ] Linux构建框架，OpenWrt, Buildroot, Yocto
+	- WHY needed?
+	- WHAT are the differences?
