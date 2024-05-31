@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-28T21:49:49.222+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-30T22:03:43.639+02:00"}
 ---
 
 ## Term and description
@@ -262,6 +262,11 @@ out1:
 	- read back from the hole file
 		- `0x00`
 		- `4.0K -rw-r--r--  1 maxin maxin 4.0K May 26 15:51 hole_bytes.txt`
+- `O_APPEND`
+	- append data to the end of the file
+	- not have any effect when reading the file
+- `O_APPEND`
+	- `lseek` doesn't work with `O_APPEND`
 
 ### NAT
 - Network Address Translation
@@ -346,6 +351,16 @@ Moreover, when we use the network interface management commands, they bring up a
 ![Z - assets/images/Pasted image 20240528214034.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240528214034.png)
 
 
+### 编译器
+- 指定头文件目录
+	- `-I`
+- 指定库文件目录
+	- `-L <directory>`
+	- `-l<library name>`
+- 动态库
+	- `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/a`
+- 静态库
+	- `-fPIC`
 
 ### 待了解
 - [ ] zImage内核文件
