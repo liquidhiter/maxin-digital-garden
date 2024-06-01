@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:13:03.723+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:20:53.140+02:00"}
 ---
 
 ## Introduction
@@ -481,3 +481,9 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 		- 时钟节拍频率越快，系统的额外开销越大
 			- 产生的中断越频繁
 		- 实时的内核有将任务延时若干个时钟节拍的功能
+		- case 1
+		![Z - assets/images/Pasted image 20240601221917.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601221917.png)
+		 - case 2
+		 ![Z - assets/images/Pasted image 20240601221859.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601221859.png)
+		 - case 3
+		 ![Z - assets/images/Pasted image 20240601222027.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601222027.png)
