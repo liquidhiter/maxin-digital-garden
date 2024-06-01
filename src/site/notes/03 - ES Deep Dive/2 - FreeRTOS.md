@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:20:53.140+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:25:15.463+02:00"}
 ---
 
 ## Introduction
@@ -487,3 +487,9 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 		 ![Z - assets/images/Pasted image 20240601221859.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601221859.png)
 		 - case 3
 		 ![Z - assets/images/Pasted image 20240601222027.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601222027.png)
+	- 对存储器的需求
+		- ROM
+			- ***应用程序代码 + 内核代码***
+		- RAM
+			- ***应用程序的RAM需求 + 任务 + 最多中断嵌套层数***
+				- 任务栈和系统栈是可以分开的
