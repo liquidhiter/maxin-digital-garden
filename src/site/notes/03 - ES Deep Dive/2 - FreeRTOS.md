@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T21:25:18.356+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T21:27:54.505+02:00"}
 ---
 
 ## Introduction
@@ -265,7 +265,8 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 	- 合作性多任务
 	- 任务切换当且仅当运行的任务主动放弃CPU的使用权（运行结束）
 	- 可以使用不可重入函数，因为任务不可被抢占
-	- example![Z - assets/images/Pasted image 20240601161433.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601161433.png)
+	- example
+	 ![Z - assets/images/Pasted image 20240601161433.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601161433.png)
 	- *高优先级的任务通过调用内核服务函数中的`延迟一个时钟节拍`来释放CPU的使用权*
 	- 主要缺陷
 		- 响应时间可能较长
@@ -292,7 +293,8 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 			- 任何时刻都可以被中断，而相应的数据不会丢失
 		- 局部变量
 		- 全局变量，需予以保护
-	- example![Z - assets/images/Pasted image 20240601170528.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601170528.png)
+	- example
+	 ![Z - assets/images/Pasted image 20240601170528.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601170528.png)
 		- 中断发生在执行`swap`函数时
 		- 低优先级任务中`y`中最终值为`3`
 	- 如何使得函数具有可重入性
@@ -311,7 +313,8 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 - 动态优先级
 	- 避免优先级反转
 - 优先级反转
-	- example![Z - assets/images/Pasted image 20240601172227.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601172227.png)
+	- example
+	 ![Z - assets/images/Pasted image 20240601172227.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601172227.png)
 	- 用于更高优先级的任务，因为共享资源被更低优先级的任务占用，导致了其必须等到更低优先级的任务执行完以后，共享资源得以释放以后，才能得到执行
 		- 在这种情况下，更高优先级的任务，实际上，降到了更低优先级
 	- 解决方法
@@ -319,7 +322,8 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 			- 改变任务的优先级需要很多时间？
 		- 内核自动变换任务的优先级
 			- 优先级继承
-		- example![Z - assets/images/Pasted image 20240601172332.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601172332.png)
+		- example
+		 ![Z - assets/images/Pasted image 20240601172332.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601172332.png)
 - 任务优先级分配
 	- 综合软实时和硬实时
 	- 单调执行率调度法 RMS(`Rate Monotonic Scheduling`)用于分配任务优先级
@@ -378,11 +382,13 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 					- 将信号量的创建和释放隐藏在驱动函数中
 						- 资源的consumer并不需要知道信号量的存在
 							- 只需要保证在其任务完成前，可以独占这一资源？
-			- example![Z - assets/images/Pasted image 20240601203244.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601203244.png)
+			- example
+			 ![Z - assets/images/Pasted image 20240601203244.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601203244.png)
 			- 计数式信号量
 				- 某一资源可以同时为几个任务所用
 				- example
-					- 信号量管理缓冲区阵列(buffer pool) ![Z - assets/images/Pasted image 20240601203718.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601203718.png)
+					- 信号量管理缓冲区阵列(buffer pool) 
+					 ![Z - assets/images/Pasted image 20240601203718.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601203718.png)
 			- 避免过度的使用信号量
 				- 申请和释放信号量会带来额外的overhead
 				- *关闭中断可能是一种更高效的方式*
@@ -399,16 +405,19 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 		- 同步
 			- 信号量，初始化为`0`
 				- 某个任务与中断服务同步，或者与另一个任务同步，但是*这2个任务间没有数据交换*
-				- 单向同步（unilateral rendezvous）![Z - assets/images/Pasted image 20240601212143.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212143.png)
+				- 单向同步（unilateral rendezvous）
+				 ![Z - assets/images/Pasted image 20240601212143.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212143.png)
 			- 计数式信号量
 				- 信号量的值表示尚未得到处理的事件数
 			- 多个任务等待同一个事件的发生
 				- 优先级最高的任务优先
 				- 最先开始等待事件的任务（FIFO原则）
 			- 2个任务可以用2个信号量同步行为
-				- 双向同步（bilateral rendezvous）![Z - assets/images/Pasted image 20240601212154.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212154.png)
+				- 双向同步（bilateral rendezvous）
+				 ![Z - assets/images/Pasted image 20240601212154.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212154.png)
 				- 注意：双向同步不可能发生在任务与ISR间，ISR不可能等待一个信号量！
-		- 事件标志![Z - assets/images/Pasted image 20240601212516.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212516.png)
+		- 事件标志
+		 ![Z - assets/images/Pasted image 20240601212516.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212516.png)
 			- 独立性同步
 				- 任务与任何时间之一同步
 			- 关联性同步
