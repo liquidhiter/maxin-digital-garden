@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:25:15.463+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:50:40.358+02:00"}
 ---
 
 ## Introduction
@@ -493,3 +493,12 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 		- RAM
 			- ***应用程序的RAM需求 + 任务 + 最多中断嵌套层数***
 				- 任务栈和系统栈是可以分开的
+	- time-triggered systems
+		- within industrial sectors where safety is an obvious concern
+			- time-triggered techniques help improve reliability and safety
+			- results in systems which have very ***predictable behaviour***
+			- can help to reduce both CPU loads and memory usage
+		- example
+			- occurrence of several events (interrupts) at the same time
+		- interrupts can be lost
+			- If you have multiple sources of interrupts that may appear at `random` time intervals, interrupt responses can be missed
