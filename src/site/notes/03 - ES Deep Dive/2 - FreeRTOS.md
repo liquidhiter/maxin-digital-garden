@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T20:39:55.916+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T21:25:18.356+02:00"}
 ---
 
 ## Introduction
@@ -386,7 +386,31 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 			- 避免过度的使用信号量
 				- 申请和释放信号量会带来额外的overhead
 				- *关闭中断可能是一种更高效的方式*
+				- 个人理解
+					- 如果对共享资源进行保护，其操作非常耗时间，使用信号量，避免延迟中断响应
 				- example
 					- 整数共享变量，关闭中断即可
 					- 浮点数共享变量，使用信号量
 						- 浮点运算时间较长（没有硬件浮点数处理器）
+		- 死锁（deadlock）
+			- 2个任务无限期地互相等待对方控制的资源
+			- 解决方案
+				- 内核允许用户在申请信号量时定义等待超时
+		- 同步
+			- 信号量，初始化为`0`
+				- 某个任务与中断服务同步，或者与另一个任务同步，但是*这2个任务间没有数据交换*
+				- 单向同步（unilateral rendezvous）![Z - assets/images/Pasted image 20240601212143.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212143.png)
+			- 计数式信号量
+				- 信号量的值表示尚未得到处理的事件数
+			- 多个任务等待同一个事件的发生
+				- 优先级最高的任务优先
+				- 最先开始等待事件的任务（FIFO原则）
+			- 2个任务可以用2个信号量同步行为
+				- 双向同步（bilateral rendezvous）![Z - assets/images/Pasted image 20240601212154.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212154.png)
+				- 注意：双向同步不可能发生在任务与ISR间，ISR不可能等待一个信号量！
+		- 事件标志![Z - assets/images/Pasted image 20240601212516.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212516.png)
+			- 独立性同步
+				- 任务与任何时间之一同步
+			- 关联性同步
+				- 任务与若干事件发生了同步
+		
