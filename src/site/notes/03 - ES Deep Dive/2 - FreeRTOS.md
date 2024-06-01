@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T21:27:54.505+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T21:44:05.496+02:00"}
 ---
 
 ## Introduction
@@ -417,9 +417,37 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 				 ![Z - assets/images/Pasted image 20240601212154.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212154.png)
 				- 注意：双向同步不可能发生在任务与ISR间，ISR不可能等待一个信号量！
 		- 事件标志
+			- 每个时间占1位（bit）
+				- 任务或中断服务可以给某一位置位或者复位
 		 ![Z - assets/images/Pasted image 20240601212516.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601212516.png)
 			- 独立性同步
 				- 任务与任何时间之一同步
 			- 关联性同步
 				- 任务与若干事件发生了同步
-		
+	- 任务间通信 （inter task communication）
+		-  全局变量
+			- *任务和中断服务程序通信的唯一方式*
+				- 任务不知道什么时候这一变量被中断服务程序修改了
+			- 发消息给另一个任务
+	- 消息邮箱（message mail box）
+		- 指针型变量？
+		- 每个邮箱有相应的正在等待消息的任务列表
+		- 内核允许定义等待超时
+			- 超时后，该任务进入就绪态，并返回错误信息，报告等待超时错误
+		-  消息放入邮箱后，会被传递给
+			- 等待消息的任务中优先级最高的
+			- 最开始等待信息的任务
+		- 邮箱也可以作为binary semaphore使用
+	- 消息队列（message queue）
+		- 先进入消息队列的任务先传给任务
+			- 支持FIFO和LIFO
+		- 工作原理类似消息邮箱
+		- [ ] 和消息邮箱相比，只是underlying的数据结构不同？
+	- 中断
+		- 通知CPU异步事件的发生
+		- CPU保存现场，部分或者全部寄存器的值，再跳转到中断服务子程序
+		- 关中断时间太长，可能会导致中断丢失
+			- WHY？中断不是写入到寄存器中对应的位吗？
+	- 中断延迟
+		- *实时内核最重要的指标就是关中断的时间的长短*
+			- *关中断的最长时间+开始执行中断服务子程序第1条指令的时间*
