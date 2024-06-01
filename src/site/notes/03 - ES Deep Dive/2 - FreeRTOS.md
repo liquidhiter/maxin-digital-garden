@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T21:51:13.230+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:13:03.723+02:00"}
 ---
 
 ## Introduction
@@ -464,3 +464,20 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 			- *恢复CPU内部寄存器的时间 + 执行中断返回指令的时间*
 		- 抢占型内核，还需要调用内核函数来判断中断是否脱离了所有的中断嵌套
 			- *+ 判断是否有优先级更高的任务进入了就绪态的时间*
+		![Z - assets/images/Pasted image 20240601215344.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240601215344.png)
+	- 中断处理时间
+		- 在中断服务中，通过信号量、邮箱或者消息队列通知一个任务是需要一定时间的
+			- 如果事件处理需要的事件 < 给一个任务通知的时间
+				- 在中断服务程序中处理这一事件
+				- 开中断允许更高优先级的中断抢占
+	- 非屏蔽中断（NMI）
+		- 可以用于时间要求最严苛的中断服务
+		- 使用NMI时，不能使用内核提供的服务，因为NMI无法关闭以处理临界区代码
+		- 可以使用全局变量（atmoic）后来传递参数给NMI或者从NMI读取参数
+		- 使用NMI产生普通的可屏蔽中断
+	- 时钟节拍（clock tick）
+		- 特定的周期性中断
+			- 10 ~ 200 ms
+		- 时钟节拍频率越快，系统的额外开销越大
+			- 产生的中断越频繁
+		- 实时的内核有将任务延时若干个时钟节拍的功能
