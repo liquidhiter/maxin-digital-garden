@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T22:50:40.358+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T23:02:04.902+02:00"}
 ---
 
 ## Introduction
