@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-03-09T21:20:34.857+01:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-06-02T09:59:42.762+02:00"}
 ---
 
 ## 零碎知识点
@@ -1499,3 +1499,19 @@ void EXTI15_10_IRQHandler(void)
     NVIC_ClearIRQ();
 }
 ```
+
+
+## 备份域SRAM
+- 通过vbat供电保持数据
+
+
+## NOR FLASH
+- 支持 `Execute On Chip`
+	- 区别于`NAND FLASH`
+- 存储单元
+	- BANK
+	- SECTOR
+- FLASH的操作一般是以SECTOR，BANK或者整片FLASH为单位的
+	- 在对FLASH进行写操作的时候，每个BIT可以通过编程由1变为0，但不可以由0修改为1
+	- 在执行写操作前，必须执行擦除操作，将FLASH的值全部修改为`0xFF`，从而确保写操作的正确性
+- floating gate MOSFET![Z - assets/images/Pasted image 20240602095940.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240602095940.png)
