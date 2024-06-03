@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-01T23:02:04.902+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-02T16:37:47.764+02:00"}
 ---
 
 ## Introduction
@@ -502,3 +502,15 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 			- occurrence of several events (interrupts) at the same time
 		- interrupts can be lost
 			- If you have multiple sources of interrupts that may appear at `random` time intervals, interrupt responses can be missed
+
+## FreeRTOS Coding Convention
+- 核心源码遵循MISRA代码规范
+- 没有引入对于C99和C11新特性的支持
+- 源码中有用到`stdint.h`
+	- `FreeRTOS/Source/include` 的一个 `stdint.readme` 文件修改为 `stdint.h`
+
+## FreeRTOS操作系统移植
+### SVD
+- System View Description
+	- 系统视图描述
+		- 对芯片的外设，存储器等进行了详细描述
