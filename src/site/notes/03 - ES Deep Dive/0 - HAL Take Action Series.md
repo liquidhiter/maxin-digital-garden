@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-06-02T10:18:49.363+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/0-hal-take-action-series/","noteIcon":"","created":"2024-02-26T20:34:12.366+01:00","updated":"2024-06-02T10:32:49.443+02:00"}
 ---
 
 ## 零碎知识点
@@ -1516,3 +1516,26 @@ void EXTI15_10_IRQHandler(void)
 	- 在执行写操作前，必须执行擦除操作，将FLASH的值全部修改为`0xFF`，从而确保写操作的正确性
 - floating gate MOSFET![Z - assets/images/Pasted image 20240602095940.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020240602095940.png)
 - reference: https://electronics.stackexchange.com/questions/97135/why-must-flash-memory-be-written-erased-in-pages-blocks
+
+## obj文件
+- 编译器将源文件编译生成为obj文件
+	- 其中的程序以及变量地址都是未定位的
+- 链接器将这些obj文件链接为一个完整的目标文件
+	- 如何对地址进行分配和定位？？？
+- 上电后，CPU都是从内部FLASH开始取指运行的
+	- 程序空间必须定位在CPU内部的FLASH中
+		- 程序空间：可执行的指令序列包括一些常量
+	- 在调试阶段，可以将代码空间定位到CPU内部的RAM或者外部的SRAM
+		- 从而节省程序装载时间以及延长FLASH使用寿命
+- 程序内存分布
+	- 栈区
+		- 栈是内存中地址连续的一个block
+	- 堆区
+		- 堆是内存中地址不连续的一个block
+			- 系统是用链表来存储空闲内存的
+	- 全局区（静态区）
+		- 全局变量和静态变量
+		- 初始化的全局变量和静态变量在一块区域
+		- 未初始化的全局变量和静态变量在相邻的另一块区域
+	- 文字常量区
+	- 程序代码区
