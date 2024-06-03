@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-05-31T22:41:04.119+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/3-linux-es/","noteIcon":"","created":"2024-05-25T20:16:37.371+02:00","updated":"2024-06-02T21:38:21.023+02:00"}
 ---
 
 ## Term and description
@@ -379,6 +379,11 @@ Moreover, when we use the network interface management commands, they bring up a
 - ls 运行，结果打印到标准输出，也就是PTY slave
 - TTY 驱动将字符复制到PTY master
 - gnome-terminal 循环从 PTY master 读取字节，绘制到用户界面上。
+```
+
+### check version of the `libc.so.6`
+```bash
+/usr/lib32/libc.so.6
 ```
 
 ### 待了解
