@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-02T16:37:47.764+02:00"}
+{"dg-publish":true,"permalink":"/03-es-deep-dive/2-free-rtos/","noteIcon":"","created":"2024-03-09T22:13:22.289+01:00","updated":"2024-06-04T05:37:46.019+02:00"}
 ---
 
 ## Introduction
@@ -502,6 +502,9 @@ uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 			- occurrence of several events (interrupts) at the same time
 		- interrupts can be lost
 			- If you have multiple sources of interrupts that may appear at `random` time intervals, interrupt responses can be missed
+## FreeRTOS Task
+- a FreeRTOS task must not be allowed to return from the function implementing it
+	- delete it if not required anymore
 
 ## FreeRTOS Coding Convention
 - 核心源码遵循MISRA代码规范
