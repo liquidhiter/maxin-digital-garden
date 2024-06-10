@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/10-native-english/01-collocate/","noteIcon":"","created":"2024-05-26T10:18:19.752+02:00","updated":"2024-05-26T10:27:18.510+02:00"}
+{"dg-publish":true,"permalink":"/10-native-english/01-collocate/","noteIcon":"","created":"2024-05-26T10:18:19.752+02:00","updated":"2024-06-09T14:19:56.171+02:00"}
 ---
 
 ## by, through, via
@@ -14,3 +14,12 @@
 	- *through* / *using* a convenience sampling method
 	- *by (American)* / *via (British)* email
 	- *by* first separating
+
+## ish
+- widely used in informal English
+- adds `ish` to the ends of words to make them sound `vague` when something is not exact
+- example
+	- numbers: `2ish` is about `2 o'clock`
+	- adjectives: `brownish` which means kind of brown
+	- directly used as `kind of`
+		- `Did you like the film? Mmm yeah, ish!`
