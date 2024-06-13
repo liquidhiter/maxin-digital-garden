@@ -1,12 +1,12 @@
 ---
-{"dg-publish":true,"permalink":"/06-plans/01-traveling-plan/","noteIcon":"","created":"2024-06-13T20:47:03.430+02:00","updated":"2024-06-13T21:02:18.106+02:00"}
+{"dg-publish":true,"permalink":"/06-plans/01-traveling-plan/","noteIcon":"","created":"2024-06-13T20:47:03.430+02:00","updated":"2024-06-13T21:07:53.028+02:00"}
 ---
 
 ## Overview
 
 | Destination | Description | Planned Date | Updated Date | Priority | Status |
 | ----------- | ----------- | ------------ | ------------ | -------- | ------ |
-| 河南南阳        | D_Family    | 2024/06/13   |              | 0        | TODO   |
+| 河南          | D_Family    | 2024/06/13   |              | 0        | TODO   |
 | 上海          | X_Family    | 2024/06/13   |              | 1        | TODO   |
 | 安徽          | X_Family    | 2024/06/13   |              | 1        | TODO   |
 | 湖北武汉        | D_Friend    | 2024/06/13   |              | 2        | TODO   |
