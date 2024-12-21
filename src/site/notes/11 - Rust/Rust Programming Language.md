@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T12:34:31.856+01:00"}
+{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T14:12:04.035+01:00"}
 ---
 
 
@@ -337,3 +337,57 @@ fn main() {
     // error: index out of bounds, compilation error
     println!("The value of first is: {}, second is: {}", first, second);
 ```
+
+#### quick learning 6
+- function
+	- `fn`
+![Z - assets/images/Pasted image 20241221123654.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221123654.png)
+- 函数的返回值
+![Z - assets/images/Pasted image 20241221140308.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221140308.png)
+- expression, statement
+```rust
+// function with return value
+// -> i32: specify the return type
+fn five() -> i32 {
+    // last expression is the return value
+    5
+}
+
+fn sive(x: u32) -> u32 {
+    x + 6
+}
+
+```
+- no implicit conversion between types
+```rust
+    let val = five();
+    println!("The value of five is: {}", val);
+
+    let val_1: u32 = sive(val as u32);
+    println!("The value of sive is: {}", val_1);
+```
+- `if-else`
+```rust
+// check whether the input is a prime number
+fn function(num: u32) -> bool {
+    if num < 2 {
+        // early return if the input is less than 2
+        return false;
+    } else {
+        for i in 2..num {
+            if num % i == 0 {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+fn is_even(num: u32) -> bool {
+    match num % 2 {
+        0 => true,
+        _ => false,
+    }
+}
+```
+> condition must be boolean, no implicit conversion to boolean types
