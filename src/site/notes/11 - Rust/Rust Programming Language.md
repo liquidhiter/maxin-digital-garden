@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T16:46:13.518+01:00"}
+{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T17:13:15.667+01:00"}
 ---
 
 
@@ -436,3 +436,108 @@ s = String::from("ahoy");
     println!("s1 = {}, s2 = {}", s1, s2);
 ```
 - stack and heap data are copied
+- `Copy` trait for types stored on the stack
+- complex types
+	- Tuple only contains types that also implements `Copy`
+```markdown
+Here are some of the types that implement `Copy`:
+
+- All the integer types, such as `u32`.
+- The Boolean type, `bool`, with values `true` and `false`.
+- All the floating-point types, such as `f64`.
+- The character type, `char`.
+- Tuples, if they only contain types that also implement `Copy`. For example, `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
+```
+- ownerships of function parameters / arguments
+	- moved and get back by explicitly returning
+```rust
+fn main() {
+    var_scope();
+}
+
+// understand the scope of variables
+fn var_scope() {
+    // ownership: simple data types
+    // simple data types are stored in stack
+    {
+        let s: &str = "hello world";
+        println!("{}", s);
+        println!("address of the variable s is {:?}", s.as_ptr());
+    }
+
+    // s is not available here
+    let s: &str = "hello rust";
+    println!("{}", s);
+
+    // ownership: complex data types
+    let s: String = String::from("string_literal");
+    println!("Address of the string variable s is {:?}", s.as_ptr());
+    println!("Address of the String object s is {:p}", &s);
+
+    // manipualte the string
+    let mut s = String::from("hello");
+    s.push_str("RUST");
+    println!("{}", s);
+
+    // Primitive data types
+    // Value is copied instead of moving
+    let mut x = 5;
+    let y = x;
+    println!("x = {}, y = {}", x, y);
+    // change the value of x
+    x = 10;
+    println!("x = {}, y = {}", x, y);
+
+    let mut s1: String = String::from("complex_data");
+    println!("address of the variable s1 is {:?}", s1.as_ptr());
+    let mut s2: String = s1;
+    // borrow of moved value ???
+    println!("address of the variable s2 is {:?}", s2.as_ptr());
+    s2.push_str("OSLO");
+    // String s1 is not available here as it is moved to s2
+
+    // clone
+    let s1: String = String::from("clone");
+    // stack and heap data are copied
+    let s2: String = s1.clone();
+    println!("s1 = {}, s2 = {}", s1, s2);
+
+    // ownership and functions
+    let s: String = String::from("ownership_moved");
+    take_ownership(s);
+
+    // println!("{}", s);
+    // ownership is moved to the function take_ownership, so s is not available here
+    let s: String = String::from("ownership_back");
+    let str_back: String = take_and_give_back(s);
+    println!("{}", str_back);
+}
+
+fn investigate_string(s: String) -> String {
+    println!("Address of the String object s is {:p}", &s);
+    println!("Address of the variable s is {:?}", s.as_ptr());
+    println!("{}", s);
+    s
+}
+
+fn take_ownership(s: String) {
+    // ownership is moved to the function take_ownership
+    investigate_string(s);
+}
+
+fn take_and_give_back(s: String) -> String {
+    let str_back: String = investigate_string(s);
+    match str_back.len() {
+        0 => String::from("empty"),
+        _ => str_back,
+    }
+}
+
+```
+> ownerships moved for variables can't be taken back
+- potential cons
+	- pass arguments and return back even when only the value (heap data???) is needed
+	- solution
+		- references
+- return multiple values
+![Z - assets/images/Pasted image 20241221171314.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221171314.png)
