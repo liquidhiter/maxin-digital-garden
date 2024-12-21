@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T12:25:26.932+01:00"}
+{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T12:34:31.856+01:00"}
 ---
 
 
@@ -315,5 +315,25 @@ fn main() {
     // println!("The value of b is: {:?}", b);
 ```
 > array length should match with the number of elements
+
+- vector
 ![Z - assets/images/Pasted image 20241221121712.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221121712.png)
+- `let var: [type, length] = [];`
 ![Z - assets/images/Pasted image 20241221121858.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221121858.png)
+- all elements have the same values
+![Z - assets/images/Pasted image 20241221122755.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221122755.png)
+- 使用索引来访问数组中的元素
+	- runtime error: index out of bound
+```rust
+    // same value for all elements
+    let c = [3; 5];
+    println!("The value of c is: {:?}", c);
+    let first = c[0];
+    let second = c[1];
+    // let six = c[5];
+    // error: index out of bounds, compilation error
+    // let index = [0, 1, 2, 3, 4, 5];
+    // let six = c[index[5]];
+    // error: index out of bounds, compilation error
+    println!("The value of first is: {}, second is: {}", first, second);
+```
