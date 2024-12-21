@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T14:12:04.035+01:00"}
+{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T16:46:13.518+01:00"}
 ---
 
 
@@ -391,3 +391,48 @@ fn is_even(num: u32) -> bool {
 }
 ```
 > condition must be boolean, no implicit conversion to boolean types
+- loop / while / for
+![Z - assets/images/Pasted image 20241221141717.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221141717.png)![Z - assets/images/Pasted image 20241221141746.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221141746.png)
+
+#### quick learning 7
+- 核心特性：所有权
+	- Rust不使用GC
+![Z - assets/images/Pasted image 20241221145650.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221145650.png)
+- 内存安全检查
+	- 编译时进行
+- reference: [What is Ownership? - The Rust Programming Language](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#)
+- ownership rules
+```markdown
+- Each value in Rust has an _owner_.
+- There can only be one owner at a time.
+- When the owner goes out of scope, the value will be dropped.
+```
+- `drop` function is automatically invoked when the variable goes out of scope
+- moving semantics
+```rust
+    let mut s1: String = String::from("complex_data");
+    println!("address of the variable s1 is {:?}", s1.as_ptr());
+    let mut s2: String = s1;
+    // borrow of moved value ???
+    println!("address of the variable s2 is {:?}", s2.as_ptr());
+    s2.push_str("OSLO");
+```
+> after `let mut s2: string = s1`, string s1 is considered as invalid
+> WHY designing in this way?
+- solving the issue of **freeing the same blob of memory twice**
+> **Rust will never automatically create deep copies of data**
+
+```rust
+let mut s = String::from("hello"); 
+s = String::from("ahoy");
+```
+- Rust also calls `drop` when assigning a completely new value to an existing variable
+- `hello` goes out of scope and Rust free the associated heap memory
+```rust
+    // clone
+    let s1: String = String::from("clone");
+    // stack and heap data are copied
+    let s2: String = s1.clone();
+    println!("s1 = {}, s2 = {}", s1, s2);
+```
+- stack and heap data are copied
