@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-21T17:13:15.667+01:00"}
+{"dg-publish":true,"permalink":"/11-rust/rust-programming-language/","noteIcon":"","created":"2024-12-20T18:41:50.355+01:00","updated":"2024-12-22T15:44:07.762+01:00"}
 ---
 
 
@@ -541,3 +541,95 @@ fn take_and_give_back(s: String) -> String {
 		- references
 - return multiple values
 ![Z - assets/images/Pasted image 20241221171314.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241221171314.png)
+- references
+	- an address which can be followed to access the data at that address, owned by other variables
+	- guaranteed to point to a valid value of a particular type for the of that reference
+	- Rust calls the action of creating reference `borrowing`
+```rust
+fn calculate_length(s: &String) -> usize {
+    // s.push_str(", oops");
+    // error[E0596]: cannot borrow *s as mutable as it is behind a & reference
+    s.len()
+}
+
+fn insert_string(s: &mut String) {
+    s.push_str(", oops");
+}
+
+let s_n: String = String::from("rust_king");
+let len: usize = calculate_length(&s_n);
+println!("The length of the given string is {}", len);
+
+let mut s_m: String = String::from("rust_king");
+insert_string(&mut s_m);
+println!("{}", s_m);
+```
+- avoid data race by preventing multiple mutable references to the same data at the same time
+- not allowed to have a mutable reference while we have an immutable one to the same value
+```rust
+
+    // multiple mutable references (error)
+    // let mut s_p: String = String::from("rust_king");
+    // let r1 = &mut s_p;
+    // let r2 = &mut s_p;
+    // println!("{}, {}", r1, r2);
+    // error[E0499]: cannot borrow `s_p` as mutable more than once at a time
+
+    // use scope to fix the above error
+    let mut s_p: String = String::from("rust_king");
+    {
+        let r1 = &mut s_p;
+        println!("{}", r1);
+    }
+    let r2 = &mut s_p;
+    println!("{}", r2);
+
+	// mutable and immutable references
+    // let mut s_p: String = String::from("rust_king");
+    // let r1 = &s_p; // immutable reference
+    // let r2 = &s_p; // immutable reference
+    // let r3 = &mut s_p; // mutable reference
+    // println!("{}, {}, and {}", r1, r2, r3);
+    // error[E0502]: cannot borrow `s_p` as mutable because it is also borrowed as immutable
+    // it is allowed to create mutable and immutable references at the same time
+    // BUT they should never be used at the same time
+```
+> Note that a reference’s scope starts from where it is introduced and continues through the last time that reference is used.
+- ~~my understanding is reference goes out of scope after being used, that's why the following code can be compiled~~ 
+```rust
+    // the code below throws error
+    let mut s_p: String = String::from("rust_king");
+    let r1 = &s_p; // immutable reference
+    let r2 = &s_p; // immutable reference
+    let r3 = &mut s_p; // mutable reference
+    println!("{}, {}", r1, r2);
+    
+    // reference's scope
+    let mut s_p: String = String::from("rust_king");
+    let r1 = &s_p;
+    let r2 = &s_p;
+    println!("{}, {}", r1, r2); // immutable reference
+    let r3 = &mut s_p;
+    println!("{}", r3); // mutable reference
+```
+> whether the scopes overlap with each other
+- dangling references
+	- *In Rust, by contrast, the compiler guarantees that references will never be dangling references: if you have a reference to some data, the compiler will ensure that the data will not go out of scope before the reference to the data does.*
+```rust
+// dangling reference
+// local variable s goes out of scope and it is dropped
+// the reference to the local variable is lost and it is a dangling reference
+fn dangle_ref() -> &String {
+    let s: String = String::from("dangle_ref");
+    &s
+}
+```
+- slice
+![Z - assets/images/Pasted image 20241222133732.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241222133732.png)
+- string literal is slice
+- pass slice as function arguments
+![Z - assets/images/Pasted image 20241222133832.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241222133832.png)
+- struct
+	- all fields are mutable if struct is mutable
+	- field and parameter names are allowed to be the same
+![Z - assets/images/Pasted image 20241222154338.png](/img/user/Z%20-%20assets/images/Pasted%20image%2020241222154338.png)
