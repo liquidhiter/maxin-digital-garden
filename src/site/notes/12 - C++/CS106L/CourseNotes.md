@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/12-c/cs-106-l/course-notes/","noteIcon":"","created":"2024-12-22T23:52:58.483+01:00","updated":"2024-12-24T01:47:49.505+01:00"}
+{"dg-publish":true,"permalink":"/12-c/cs-106-l/course-notes/","noteIcon":"","created":"2024-12-22T23:52:58.483+01:00","updated":"2024-12-24T01:49:04.313+01:00"}
 ---
 
 - [ ] future courses might follow
@@ -504,6 +504,7 @@ inline void cin_stream() {
 > [WORKAROUND]
 > -[x] consumes the left-over newline character in the buffer by first calling a dummy getline
 > -[x] reads out the `real` input from the buffer
+
 **More explanation**
 [[ChatGPT/fstream\|fstream]]
 
